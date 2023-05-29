@@ -1,0 +1,166 @@
+<!--
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">-->
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">Inscrição de cliente</h5>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <label>Cliente status</label>
+        <app-switch size="small" [checked]="client.ative" (click)="updateClientStatus(client.id)"></app-switch>
+        <p>
+          Current Value: {{value | json}}
+        </p>
+      </div>
+    </div>
+  </div>
+  <form role="form" [formGroup]="Form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="row">
+
+      <div class="col-sm-12">
+        <!-- text input -->
+        <div class="form-group">
+          <label>Nome completo</label>
+          <input type="text" class="form-control" placeholder="Nome completo" formControlName="fullName"
+            [(ngModel)]="client.fullName" minlength="3" [ngClass]="{
+                'is-invalid': Form.controls['fullName'].touched && Form.controls['fullName'].invalid
+              }">
+        </div>
+        <div
+          *ngIf="Form.controls['fullName'].invalid && (Form.controls['fullName'].dirty || Form.controls['fullName'].touched)"
+          class="invalid-feedback-error">
+          <div *ngIf="Form.controls['fullName'].errors.required">
+            Name is required.
+          </div>
+          <div *ngIf="Form.controls['fullName'].errors.minlength">
+            Name must be at least 3 characters long.
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label>Email</label>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+          </div>
+          <input type="email" class="form-control" placeholder="Email" [(ngModel)]="client.email"
+            formControlName="email">
+        </div>
+        <div *ngIf="Form.controls['email'].invalid && (Form.controls['email'].dirty || Form.controls['email'].touched)"
+          class="invalid-feedback-error">
+          <div *ngIf="Form.controls['email'].errors.required">
+            Email is required.
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label>Telefone</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fas fa-phone"></i></span>
+            </div>
+            <input type="text" class="form-control" formControlName="phone" [(ngModel)]="client.phone"
+              placeholder="Telefone">
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label>Morada</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fas fa-home"></i></span>
+            </div>
+            <input type="text" class="form-control" formControlName="address" [(ngModel)]="client.address"
+              placeholder="Morada" [ngClass]="{
+                'is-invalid': Form.controls['address'].touched && Form.controls['address'].invalid
+              }">
+          </div>
+          <!-- /.input group -->
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label>Data nascimento</label>
+          <div class="input-group date" data-target-input="nearest" NgTempusdominusBootstrap>
+            <input class="form-control" formControlName="birthday" [options]="options" NgTempusdominusBootstrapInput
+              type="text" [(ngModel)]="client.birthday" />
+            <div class="input-group-append" NgTempusdominusBootstrapToggle>
+              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--div class="col-sm-3">
+        <div class="form-group">
+          <label>Codigo do cartão</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="far fa-id-card"></i></span>
+            </div>
+            <input type="text" class="form-control" [ngModel]="cardCode" formControlName="cardCode">
+          </div>
+        </div>
+      </div-->
+    </div>
+    <div class="row">
+      <div class="col-sm-9">
+        <div class="form-group">
+          <label>Imagem</label>
+          <div class="custom-file">
+            <!--<input type="file" class="custom-file-input" id="customFile">-->
+            <input type='file' class="custom-file-input" id="customFile" formControlName="img" id="imageUpload"
+              accept=".png, .jpg, .jpeg" (change)="onSelectFile($event)" />
+            <label class="custom-file-label" for="customFile">Choose file</label>
+            <label class="custom-file-label" for="customFile" *ngIf="fileName">{{fileName}}</label>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-sm-3">
+                          <div class="form-group">
+                            <label style="color: #ffffff;">Tirar fotografia</label>
+                            <div class="custom-file">
+                              <i class="fas fa-camera" style="font-size:40px; cursor: pointer;" (click)="ativeCamera()"></i>
+                            </div>
+                          </div>
+                        </div>-->
+    </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="form-group">
+          <div class="custom-file" *ngIf="avatar">
+            <i class="fas fa-times" style="position: absolute; cursor: pointer;" (click)=removeAvatar()></i>
+            <img [src]="avatar" height="100">
+          </div>
+          <!--<app-camera (pictureTaken)="handleImage($event)" *ngIf="isAtive"></app-camera>
+                            <div class="snapshot" *ngIf="webcamImage">
+                              <img [src]="webcamImage.imageAsDataUrl" [height]="200" [width]="250" />
+                            </div>-->
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" style="margin-top:50px">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="decline()"><i
+          class="mdi mdi-18px mdi-close-outline fs-19"></i>{{ btnCancelText }}</button>
+      <button type="submit" class="btn btn-primary" (click)="accept()"
+        [disabled]="Form.pristine || Form.invalid">{{ btnOkText }}<i class="mdi mdi-send mdi-rotate-315 mdi-18px"
+          style="margin-left: 5px;"></i></button>
+    </div>
+  </form>
+</div>
+
+<!--</div>
+              </div>
+            </div>
+            </section>
+          </div>-->

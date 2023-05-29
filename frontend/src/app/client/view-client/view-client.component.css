@@ -1,0 +1,30 @@
+.col-md-6 {
+  flex: 0 0 100% !important;
+  max-width: 100%;
+}
+
+.widget-user .widget-user-header {
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  height: 235px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.widget-user .card-footer {
+  padding-top: 150px;
+  height: auto;
+}
+
+.widget-user .widget-user-image > img {
+  margin-left: -110px !important;
+  width: 300px;
+  height: 300px;
+}
+
+.widget-user .widget-user-image {
+  left: 50%;
+  margin-left: -45px;
+  position: absolute;
+  top: 80px;
+}

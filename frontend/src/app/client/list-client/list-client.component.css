@@ -1,0 +1,62 @@
+.search-box {
+  position: relative;
+  float: right;
+}
+.search-box input {
+  height: 34px;
+  border-radius: 20px;
+  padding-left: 35px;
+  border-color: #ddd;
+  box-shadow: none;
+}
+.search-box input:focus {
+  border-color: #3FBAE4;
+}
+.search-box i {
+  color: #a0a5b1;
+  position: absolute;
+  font-size: 19px;
+  top: 8px;
+  left: 10px;
+}
+
+
+table.table th i {
+  font-size: 13px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+table.table td:last-child {
+  width: 130px;
+}
+table.table td a {
+  display: inline-block;
+  margin: 0 5px;
+  cursor: pointer;
+}
+table.table td a.view {
+  color: #03A9F4;
+}
+table.table td a.edit {
+  color: #FFC107;
+}
+table.table td a.delete {
+  color: #E34724;
+}
+table.table td i {
+  font-size: 24px;
+}
+
+.status {
+  font-size: 25px;
+  margin: 2px 2px 0 0;
+  display: inline-block;
+  line-height: 10px;
+}
+  .text-success {
+      color: #10c469;
+  }
+
+  .text-danger {
+      color: #ff5b5b;
+  }

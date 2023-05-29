@@ -1,0 +1,176 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Recibo</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a [routerLink]="['']">Home</a></li>
+            <li class="breadcrumb-item active">Recibo</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <button type="button" class="btn btn-success" (click)="onClickAddRecibo()"><i
+              class="mdi mdi-plus-outline mdi-18px"></i> Pagar mensalidade</button>
+        </div>
+        <div class="col-sm-6">
+          <div class="search-box">
+            <i class="material-icons">&#xE8B6;</i>
+            <input type="text" class="form-control" placeholder="Search&hellip;" [(ngModel)]="searchText">
+          </div>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+  <section class="content-header">
+    <form role="form" [formGroup]="Form" novalidate>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <div class="input-group date" data-target-input="nearest" NgTempusdominusBootstrap>
+                    <input
+                    class="form-control"
+                    [(ngModel)]="startDate"
+                    (ngModelChange)="update()"
+                    [options]="startOptions"
+                    NgTempusdominusBootstrapInput
+                    type="text"
+                    formControlName="from"
+                    />
+                    <div class="input-group-append" NgTempusdominusBootstrapToggle>
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <div class="input-group date" data-target-input="nearest" NgTempusdominusBootstrap>
+                    <input
+                    class="form-control"
+                    [(ngModel)]="endDate"
+                    (ngModelChange)="update()"
+                    [options]="endOptions"
+                    NgTempusdominusBootstrapInput
+                    type="text"
+                    formControlName="to"
+                    />
+                    <div class="input-group-append" NgTempusdominusBootstrapToggle>
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+  </form>
+  </section>
+  <section class="content">
+    <div id="accordion">
+      <div class="card" *ngFor="let recibo of recibos | filter:searchText | slice: (page-1) * pageSize : page * pageSize; let index = index">
+        <div class="card-header" [attr.id]="'heading' + recibo.id">
+          <h5 class="mb-0" >            
+            <div class="row">
+              <div class="col-8" data-toggle="collapse" [attr.data-target]="'#collapse' + recibo.id" style="cursor: pointer;">
+                <span style="margin-right: 10px;">#{{recibo.receiptNumber}}</span>
+                <span style="margin-right: 10px;">{{recibo.client.fullName}}</span>
+                <span style="margin-right: 100px;">{{recibo.createdAt | date:'mediumDate'}}</span>
+                <span style="margin-right: 5px;" *ngFor="let mes of recibo.monthlyPayment">{{mes.month}}</span>
+                
+              </div>
+              <!--div class="col-4 d-flex flex-row-reverse" ><span ><i class="material-icons delete" style="cursor: pointer;" (click)="apagar()" >&#xE872;</i></span></div-->
+            </div>
+            
+            
+          </h5>
+          <div [attr.id]="'collapse' + recibo.id" class="collapse" aria-labelledby="headingOne"
+            data-parent="#accordion">
+            <div class="card-body">
+              <!-- https://www.bootdey.com/snippets/view/Invoice-with-ribbon#html -->
+              <div class="container mt-5">
+                <div class="d-flex justify-content-center row">
+                  <div class="col-md-8">
+                    <div class="p-3 bg-white rounded">
+                      <div class="invoice-ribbon">
+                        <div class="ribbon-inner">PAID</div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <h1 class="text-uppercase">RECIBO</h1>
+                          <div class="billed"><span class="font-weight-bold text-uppercase">nº: </span>#{{recibo.receiptNumber}}<span
+                              class="ml-1"></span></div>
+                          <div class="billed"><span class="font-weight-bold text-uppercase">Nome: </span>{{recibo.client.fullName}}<span
+                              class="ml-1"></span></div>
+                          <div class="billed"><span class="font-weight-bold text-uppercase">Data: </span>{{recibo.createdAt | date:'mediumDate'}}<span
+                              class="ml-1"></span></div>
+                        </div>
+
+                      </div>
+                      <div class="mt-3">
+                        <div class="table-responsive">
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                <th>Mês</th>
+                                <th>Disconto</th>
+                                <th>Preço</th>
+                              </tr>
+                            </thead>
+                            <tbody>                             
+                            <tr *ngFor="let mes of recibo.monthlyPayment, let i = index">
+                              <td>{{i +1}}</td>
+                              <td>{{ mes.month}}</td>
+                              <td>{{ mes.discount}}$00</td>
+                              <td>{{ mes.price}}$00</td>
+                            </tr>
+                            <tr>
+                              <td>Total</td>
+                              <td></td>
+                              <td></td>
+                              <td>{{recibo.totalPayment}}$00</td>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-6 margintop">
+                            <a class="btn btn-primary" href="{{RECIBO_BASE_URL + recibo.fileName }}" role="button" class="btn btn-success" id="invoice-print" target="_blank"><i class="fa fa-print" ></i> Imprimir</a>  
+                            <a class="btn btn-primary" role="button" class="btn btn-danger" style="color: #fff; margin-left: 5px;"(click)="sendReciboByEmail(recibo.id)"><i class="fa fa-envelope"></i> Inviar por email</a>             
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="recibos.length > 7" style="margin-top: 10px;" class="d-flex justify-content-end pagination-rounded-flat">
+        <span class="space-right" style="margin-top: 5px;">Itens por pagina</span>
+        <select class="custom-select" style="width: auto; margin-right: 5px; margin-left: 5px;" [(ngModel)]="pageSize" (ngModelChange)="getPremiumData();">
+          <option [ngValue]="7">7</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="15">15</option>
+          <option [ngValue]="20">20</option>
+          <option [ngValue]="25">25</option>
+        </select> 
+        <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [maxSize]="5" [boundaryLinks]="true"
+          [pageSize]="pageSize" class="d-flex justify-content-end pagination-rounded-flat pagination-success">
+        </ngb-pagination>
+      </div>
+    </div>
+  </section>
+
+</div>

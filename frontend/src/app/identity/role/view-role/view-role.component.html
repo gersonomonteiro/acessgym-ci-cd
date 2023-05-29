@@ -1,0 +1,119 @@
+<div class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Role</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a [routerLink]="['/home/roles']">Roles</a></li>
+              <li class="breadcrumb-item active">Role</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="content">
+      <div class="container-fluid">
+        <form role="form2" [formGroup]="Form2" novalidate>
+
+          <div class="card">
+            <div class="card-body">
+
+              <div class="container">
+                <div class="form-group row">
+                  <div class="col">
+                    <input type="text" formControlName="name" class="form-control" id="name" placeholder="role name"
+                      minlength="3" [(ngModel)]="role.name">
+                  </div>
+                  <div class="col">
+                    <div class="p-2" *ngIf="iditIcon">
+                      <ul class="nav nav-pills renameRole" (click)="enableForm2()" style="cursor: pointer;">
+                        <i class="mdi mdi-pencil fs-9"></i>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-top: 5px;" *ngIf="showBtn">
+                  <button type="button" class="btn btn-outline-primary btn-sm" (click)="onSubmitRoleName(role.id)"
+                    style="
+                margin-right: 10px;">save</button>
+                  <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cancel2()">cancelar</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-sm-6">
+            <form role="form" [formGroup]="Form" novalidate>
+              <div class="card border-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Edit Permissions</h3>
+                </div>
+                <div class="card-body">
+                  <div class="form-group">
+                    <div class="form-check" *ngFor="let n of role.permission , let i = index;">
+                      <input class="form-check-input" type="checkbox" checked [value]="n.name"
+                        (change)="onCheckboxChange($event)">{{role.permission[i].name}}
+                    </div>
+                    <div class="form-check" *ngFor="let n of allPermissions , let i = index;">
+                      <div *ngIf="!contansPermission(n.name)">
+                        <input class="form-check-input" type="checkbox" [value]="n.name"
+                          (change)="onCheckboxChange($event)">{{n.name}}
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="card text-right" style="width: 5rem;">
+                    <button type="submit" class="btn btn btn-outline-primary btn-sm"
+                      (click)="onSubmit(role.id)">Save</button>
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+
+          <div class="col-sm-6">
+            <form role="form" [formGroup]="FormAddUserRole" novalidate>
+              <div class="card border-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Edit Usres</h3>
+                </div>
+                <div class="card-body">
+                  <div class="form-group">
+                    <div class="form-check" *ngFor="let n of role.users , let i = index;">
+                      <input class="form-check-input" type="checkbox" checked [value]="n.id"
+                        (change)="onCheckboxAddUserRoleChange($event)">{{role.users[i].email}}
+                    </div>
+                    <div class="form-check" *ngFor="let n of allUsers , let i = index;">
+                      <div *ngIf="!contansUser(n.email)">
+                        <input class="form-check-input" type="checkbox" [value]="n.id"
+                          (change)="onCheckboxAddUserRoleChange($event)">{{n.email}}
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="card text-right" style="width: 5rem;">
+                    <button type="submit" class="btn btn btn-outline-primary btn-sm"
+                      (click)="onSubmitAddUserRole(role.id)">Save</button>
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>

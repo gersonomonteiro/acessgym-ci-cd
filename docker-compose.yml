@@ -1,0 +1,44 @@
+version: '3.1'
+
+services:
+  mysql:
+    image: mysql:5.7.31
+    container_name: mysql-accessgym
+    restart: unless-stopped
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: jmYFW28LuQmVXCo9tLB1
+      MYSQL_DATABASE: acessgym
+    volumes:
+      - ./mysql/scripts:/docker-entrypoint-initdb.d
+      - ./mysql/conf/my.cnf:/etc/mysql/my.cnf
+      - mysql-data:/var/lib/mysql
+  frontend:
+    build: ./frontend
+    container_name: frontend-accessgym
+    restart: unless-stopped
+    ports:
+      - 4200:4200
+    depends_on:
+      - mysql
+      - backend
+    volumes:
+      - frontend_node_modules:/usr/src/app/node_modules
+      - ./frontend/src:/usr/src/app/src
+  backend:
+    build: ./backend
+    command: sh -c "npm run migrate && node src/index.js"
+    container_name: backend-accessgym
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+    volumes:
+      - backend_node_modules:/usr/src/app/node_modules
+      - ./backend/src:/usr/src/app/src
+volumes:
+    frontend_node_modules:
+    backend_node_modules:
+    mysql-data:

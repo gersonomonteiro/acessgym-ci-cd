@@ -1,0 +1,10 @@
+/*Profile Pic*/
+.renameRole i:hover{
+    border-radius: 105%;
+    border: 1px 1px solid transparent;
+    background: #d4d2d2;
+    cursor: pointer;    
+    padding:2px 5px 2px 3px;
+    text-align: center;
+  }
+  

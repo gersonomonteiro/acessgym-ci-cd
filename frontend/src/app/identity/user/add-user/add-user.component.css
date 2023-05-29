@@ -1,0 +1,9 @@
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~bs-stepper/dist/css/bs-stepper.min.css';
+
+.invalid-feedback-error {
+    width: 100%;
+    margin-top: -16px;
+    font-size: 80%;
+    color: #dc3545;
+}

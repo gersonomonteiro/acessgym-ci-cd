@@ -1,0 +1,76 @@
+<div class="container" style="margin-top:30px">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="card card-primary card-outline">
+                <div class="card-body box-profile">
+                    <div class="imgcontainer">
+                        <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="Avatar" class="avatar">
+                        <input type="file" id="wizard-picture" name="img" (change)="onFileSelect($event)">
+                        <i class="fa fa-edit"></i>
+                    </div>
+
+                    <h3 class="profile-username text-center">{{currentUser.firstname}} {{currentUser.lastname}}</h3>
+
+                    <p class="text-muted text-center">Super admin</p>
+
+                    <ul class="list-group list-group-unbordered mb-3">
+                        <li class="list-group-item">
+                            <b>Email</b>
+                            <a class="float-right">{{currentUser.email}}</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Phone number</b>
+                            <a class="float-right">{{currentUser.phone}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.card-body -->
+
+            </div>
+            <div class="container">
+                <div class="card">
+                    <div class="card-body">
+                        <button type="button" class="btn btn-outline-secondary">Cancelar</button>
+                        <button type="button" (click)="saveChange(Form.value,currentUser.id)" class="btn btn-primary">Guardar alteração</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-sm-8">
+            <div class="col">
+                <div class="" id="multiCollapseExample1">
+                    <div class="card card-body">
+                        <form role="form" [formGroup]="Form">
+                            <div class="form-row">
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="validationDefault01">First name</label>
+                                    <input type="text" formControlName="firstname" class="form-control" id="validationDefault01" [(ngModel)]="currentUser.firstname">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="validationDefault02">Last name</label>
+                                    <input type="text" formControlName="lastname" class="form-control" id="validationDefault02" [(ngModel)]="currentUser.lastname">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="validationDefault03">Phone</label>
+                                    <input type="number" formControlName="phone" class="form-control" id="validationDefault03" [(ngModel)]="currentUser.phone">
+                                </div>
+
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="validationDefault03">Password</label>
+                                    <input type="password" formControlName="password" class="form-control" id="validationDefault04" [(ngModel)]="currentUser.password">
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

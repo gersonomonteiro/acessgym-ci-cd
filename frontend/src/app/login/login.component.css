@@ -1,0 +1,27 @@
+.login-box {
+    width: 100% !important;
+    background-image: url("../../assets/gym.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.card {
+    width: 400px;
+    height: 250px;
+}
+
+.field-icon {
+    float: right;
+    margin-left: -25px;
+    margin-top: -25px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .invalid-feedback-error {
+    width: 100%;
+    margin-top: -16px;
+    font-size: 80%;
+    color: #dc3545;
+}

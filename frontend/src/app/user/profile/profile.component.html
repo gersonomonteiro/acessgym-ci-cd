@@ -1,0 +1,211 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Profile</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a [routerLink]="['']">Home</a></li>
+            <li class="breadcrumb-item active">Profile</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+  <form role="form" [formGroup]="Form">
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md"></div>
+          <div class="col-md-4">
+
+            <!-- Profile Image -->
+            <div class="card card-primary card-outline">
+              <div class="card-body box-profile">
+                <div class="avatar-upload">
+                  <div class="avatar-edit">
+                    <input type='file' formControlName="img" id="imageUpload" accept=".png, .jpg, .jpeg"
+                      (change)="onSelectFile($event)" />
+                    <label for="imageUpload"></label>
+                  </div>
+                  <div class="avatar-preview">
+                    <div id="imagePreview" [style.backgroundImage]="'url('+ avatar +')'">
+                    </div>
+                  </div>
+                </div>
+
+                <h3 class="profile-username text-center">{{currentUser.firstname}} {{currentUser.lastname}}</h3>
+
+                <p class="text-muted text-center">Super admin</p>
+
+                <ul class="list-group list-group-unbordered mb-3">
+                  <li class="list-group-item">
+                    <b>Email</b> <a class="float-right">{{currentUser.email}}</a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Telefone</b> <a class="float-right">{{currentUser.phone}}</a>
+                  </li>
+                </ul>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+          <div class="col-md-6">
+            <div class="card">
+              <!-- Tabs -->
+              <ul class="nav nav-pills custom-pills" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link" id="pills-profile-tab" (click)="viewMode ='tab1'"
+                    [class.active]="viewMode == 'tab1'" style="cursor: pointer;">Profile</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="pills-setting-tab" (click)="viewMode ='tab2'"
+                    [class.active]="viewMode == 'tab2'" style="cursor: pointer;">Password</a>
+                </li>
+              </ul>
+              <!-- Tabs -->
+              <!-- /.card-header -->
+              <div class="card-body" [ngSwitch]="viewMode">
+                <div class="tab-content" id="tab1" *ngSwitchCase="'tab1'">
+                  <div class="card-header p-2">
+                    <ul class="nav nav-pills idit" (click)="enableForm()">
+                      <i class="fa fa-edit">click here to edit</i>
+                    </ul>
+                  </div>
+                  <div class="card-body">
+                    <div class="form-group row">
+                      <label for="inputName" class="col-sm-2 col-form-label">Nome</label>
+                      <div class="col-sm-10">
+                        <input type="text" formControlName="firstname" class="form-control" id="validationDefault01"
+                          [(ngModel)]="currentUser.firstname">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="inputApelido" class="col-sm-2 col-form-label">Apelido</label>
+                      <div class="col-sm-10">
+                        <input type="text" formControlName="lastname" class="form-control" id="lastname"
+                          [(ngModel)]="currentUser.lastname">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="inputPhone" class="col-sm-2 col-form-label">Telefone</label>
+                      <div class="col-sm-10">
+                        <input type="number" formControlName="phone" class="form-control" id="phone"
+                          [(ngModel)]="currentUser.phone">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="inputExperience" class="col-sm-2 col-form-label">Email</label>
+                      <div class="col-sm-10">
+                        <input type="email" formControlName="email" class="form-control" id="email"
+                          [(ngModel)]="currentUser.email">
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="card-footer">
+                    <button type="button" (click)="cancel()" class="btn btn-outline-secondary btn-sm">Cancelar</button>
+                    <button type="button" (click)="saveChange(Form.value,currentUser.id)" class="btn btn-primary btn-sm"
+                      style="margin-left: 5px;">Guardar </button>
+                  </div>
+                  <!-- /.tab-pane 1 -->
+
+                </div>
+                <!-- /.tab-content 2 -->
+                <div class="tab-content" id="tab2" *ngSwitchCase="'tab2'">
+                  <form [formGroup]="formChangePwd">
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label for="oldPwd">Old Password</label>
+                        <input type="password" formControlName="oldPwd" class="form-control" id="oldPwd"
+                          placeholder="old password" [ngClass]="{
+                            'is-invalid': oldPwd.touched && oldPwd.invalid
+                          }">
+                        <span id="oldPwd" class="error invalid-feedback"
+                          *ngIf="oldPwd.touched && oldPwd.invalid && oldPwd.errors.required">Old Password is
+                          required.</span>
+                        <span id="oldPwd" class="error invalid-feedback"
+                          *ngIf="oldPwd.touched && oldPwd.invalid && oldPwd.errors.shouldBeNewPwd">Old Password is not
+                          valid.</span>
+
+                      </div>
+                      <label for="newPwd">New Password</label>
+                      <div class="input-group mb-3">
+                        <input [type]="fieldTextType ? 'text' : 'password'" formControlName="newPwd"
+                          class="form-control" placeholder="Password" [ngClass]="{
+                            'is-invalid': newPwd.touched && newPwd.invalid
+                          }" id="newPwd">
+                        <div class="input-group-append border-left-0">
+                          <div class="input-group-text" style="background-color: #fff;">
+                            <i class="fa fa-eye-slash" [ngClass]="{
+                                'fa-eye-slash': !fieldTextType,
+                                'fa-eye': fieldTextType
+                              }" (click)="toggleFieldTextType()">
+                            </i>
+                          </div>
+                        </div>
+
+                        <div *ngIf="f.newPwd.touched && f.newPwd.errors" class="invalid-feedback">
+                          <div *ngIf="f.newPwd.errors.required">Password is required</div>
+                          <div *ngIf="f.newPwd.errors.minlength">
+                            Password must be at least 6 characters
+                          </div>
+                          <div *ngIf="f.newPwd.errors.maxlength">
+                            Username must not exceed 40 characters
+                          </div>
+                        </div>
+                      </div>
+                      <app-strong-password [passwordToCheck]="formChangePwd.value.newPwd"
+                        (passwordStrength)="passwordValid($event)"></app-strong-password>
+
+                      <div class="form-group">
+                        <label for="confirmPwd">Confirm Password</label>
+
+                        <input type="password" formControlName="confirmPwd" class="form-control" id="confirmPwd"
+                          placeholder="confirm password" [ngClass]="{
+                            'is-invalid': f.confirmPwd.touched && f.confirmPwd.invalid
+                          }">
+
+                        <div *ngIf="f.confirmPwd.touched && f.confirmPwd.errors" class="invalid-feedback">
+                          <div *ngIf="f.confirmPwd.errors.required">
+                            Confirm Password is required
+                          </div>
+                          <div *ngIf="f.confirmPwd.errors.matching">
+                            Confirm Password does not match
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                      <button type="button" (click)="onReset()"
+                        class="btn btn-outline-secondary btn-sm">Cancelar</button>
+                      <button type="button" (click)="updatePwd(currentUser.id)" class="btn btn-primary btn-sm"
+                        style="margin-left: 5px;" [disabled]="formChangePwd.invalid || !passwordIsValid">Submit</button>
+                    </div>
+                  </form>
+                </div>
+                <!-- /.tab-pane 2 -->
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.nav-tabs-custom -->
+          </div>
+          <!-- /.col -->
+          <div class="col-md"></div>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+  </form>
+</div>

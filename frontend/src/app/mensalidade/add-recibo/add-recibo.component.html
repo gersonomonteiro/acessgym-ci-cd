@@ -1,0 +1,81 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">Pagar monsalidade</h5>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <!-- https://getbootstrap.com/docs/5.0/forms/form-control/ 
+    https://stackblitz.com/edit/angular-datalist-option?file=src%2Fapp%2Fapp.component.ts-->
+  <form role="form" [formGroup]="Form" (ngSubmit)="send(Form.value)" novalidate>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <label>Email do cliente</label>
+          <input type="text" list="codes" class="form-control" [(ngModel)]="codeValue" (change)="saveCode($event)"
+            placeholder="nome cliente">
+          <datalist id="codes">
+            <option *ngFor="let client of clients" [value]="client.email">{{client.fullName}}</option>
+          </datalist>
+        </div>
+        <!-- </div>https://stackblitz.com/edit/angular-dynamic-form-fields?file=src%2Fapp%2Fapp.component.html,src%2Fapp%2Fapp.component.ts
+      https://blog.angular-university.io/angular-form-array/ 
+      https://stackblitz.com/edit/angular-form-array-example-8tzpct?file=src%2Fapp%2Fapp.component.ts
+      to add https://blog.jscrambler.com/working-with-angular-formarray
+      -->
+        <div *ngFor="let mess of getMensalidadeFormControls(); let i = index" formArrayName="monthlyPayment">
+          <div [formGroupName]="i">
+            <div class="col-sm-3 nopadding">
+              <div class="form-group">
+                <div class="input-group">
+                  <select class="form-control" formControlName="month">
+                    <option [ngValue]="null">--Mês--</option>
+                    <option *ngFor="let mes of meses">{{mes}}</option>
+                  </select>
+                </div>
+                <!-- /.input group -->
+              </div>
+            </div>
+            <div class="col-sm-3 nopadding">
+              <div class="form-group">
+                <input type="number" formControlName="price" class="form-control" id="preco" name="preco"
+                  placeholder="preço">
+              </div>
+            </div>
+            <div class="col-sm-3 nopadding">
+              <div class="form-group">
+                <input type="number" formControlName="discount" class="form-control" id="disconto" name="disconto"
+                  placeholder="disconto">
+              </div>
+            </div>
+            <div class="col-sm-3 nopadding">
+              <button class="btn btn-success" type="button" (click)="addMensalidade()"> <i
+                  class="mdi mdi-plus-outline mdi-16px"></i>
+              </button>
+              <button class="btn btn-danger" type="button" (click)="removeMensalidade(i)" style="margin-left: 5px;"
+                [disabled]="desableRemoveBtn()"> <i class="mdi mdi-minus mdi-16px"></i>
+              </button>
+            </div>
+          </div>          
+        </div>
+        <div class="col-sm-12 nopadding">
+          <div *ngIf="isDuplicate(Form.value)" class="invalid-feedback-error">
+            <div *ngIf="isDuplicate(Form.value)">
+              Mês duplicado.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="margin-top:50px">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="decline()"><i
+            class="mdi mdi-18px mdi-close-outline fs-19"></i>{{ btnCancelText }}</button>
+        <button type="submit" class="btn btn-primary" (click)="accept()"
+          [disabled]="Form.pristine || Form.invalid || isDuplicate(Form.value) || undefined"><i
+            class="mdi mdi-send mdi-rotate-315 mdi-18px" style="margin-left: 5px;"></i>Guardar</button>
+      </div>
+    </div>
+  </form>
+  <!--
+  {{Form.value | json}}
+  -->
+</div>

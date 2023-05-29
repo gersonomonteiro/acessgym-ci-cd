@@ -1,0 +1,35 @@
+const Sequelize = require('sequelize')
+const config = require('../config/db.config')
+
+const User = require('../models/User')
+const Role = require('../models/Role')
+const Permission = require('../models/Permission')
+const Image = require('../models/Image')
+const Client = require('../models/Client')
+const Access = require('../models/Access')
+const Receipt = require('../models/Receipt')
+const MonthlyPayment = require('../models/MonthlyPayment')
+const Configuration = require('../models/Configuration')
+
+const connection = new Sequelize(config)
+
+User.init(connection)
+Role.init(connection)
+Permission.init(connection)
+Image.init(connection)
+Client.init(connection)
+Access.init(connection)
+Receipt.init(connection)
+MonthlyPayment.init(connection)
+Configuration.init(connection)
+
+User.associate(connection.models)
+Role.associate(connection.models)
+Image.associate(connection.models)
+Permission.associate(connection.models)
+Client.associate(connection.models)
+Access.associate(connection.models)
+Receipt.associate(connection.models)
+MonthlyPayment.associate(connection.models)
+
+module.exports = connection

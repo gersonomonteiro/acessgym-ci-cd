@@ -1,0 +1,78 @@
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4" *ngIf="isLoggedIn">
+  <!-- Brand Logo -->
+  <a [routerLink]="['home']" class="brand-link">
+    <img src="../../assets/dumbbells_weight_gym_icon_179311.png" alt="AdminLTE Logo"
+      class="brand-image img-circle elevation-3" style="opacity: .8">
+    <span class="brand-text font-weight-light">AcessGym</span>
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="image">
+              <img src="../../assets/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          </div>
+          <div class="info">
+              <a href="#" class="d-block">{{currentUser.firstname}} {{currentUser.lastname}}</a>
+          </div>
+      </div> -->
+
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Add icons to the links using the .nav-icon class
+           with font-awesome or any other icon font library-->
+        <li class="nav-item has-treeview">
+          <a [routerLink]="['home']" class="nav-link">
+            <i class="right fas fa-home"></i>
+            <p style="margin-left: 4px;">
+              HOME
+            </p>
+          </a>
+        </li>
+        <div *ngxPermissionsOnly="['CREATE_USER','READ_USER','UPDATE_USER','DELETE_USER']">
+
+          <li class="nav-header" style="margin-left: 11px;">IDENTITY</li>
+          
+              <li class="nav-item">
+                <a [routerLink]="['home/users']" class="nav-link">
+                  <i class="right fa fa-users"></i>
+                  <p style="margin-left: 9px;">Users</p>
+                </a>
+              </li>
+              <li class="nav-item" *ngxPermissionsOnly="['READ_USER']">
+                <a [routerLink]="['home/roles']" class="nav-link">
+                  <i class="right fa fa-cog"></i>
+                  <p style="margin-left: 9px;">Roles</p>
+                </a>
+          </li>
+        </div>
+        <li class="nav-header" style="margin-left: 4px;">GINÁSIO</li>
+        <li class="nav-item has-treeview">
+          <a [routerLink]="['home/clients']" class="nav-link">
+            <i class="right fas fa-dumbbell"></i>
+            <p style="margin-left: 6px;">
+              Cliente
+            </p>
+          </a>
+          
+        </li>
+        <li class="nav-item has-treeview">
+          <a [routerLink]="['home/mensalidade']" class="nav-link">
+            <i class="right fa fa-money"> </i>
+            <p style="margin-left: 6px;">
+              Mensalidades
+            </p>
+          </a>
+          
+        </li>
+
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>

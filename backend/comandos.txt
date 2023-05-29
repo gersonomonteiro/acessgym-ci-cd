@@ -1,0 +1,17 @@
+npm install express express-validator sequelize mysql2 body-parser cors jsonwebtoken bcryptjs sequelize-cli  nodemon --save
+
+npx sequelize init
+npx sequelize migration:create --name=create-users
+npx sequelize migration:create --name=create-role
+npx sequelize migration:create --name=create-permission
+npx sequelize migration:create --name=create-user-role
+npx sequelize migration:create --name=create-role-permission
+npx sequelize migration:create --name=create-acesso
+npx sequelize migration:create --name=create-monthly-payment
+npx sequelize db:migrate
+npx sequelize-cli db:migrate:undo:all
+
+npx sequelize migration:create --name=configuration
+
+npx sequelize-cli db:migrate:undo:all --to 20210717152601-create-accessed.js
+npx sequelize-cli db:migrate:undo:all --to 20220923165608-create-receipt.js

@@ -1,0 +1,47 @@
+<!--
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">-->
+        <div class="modal-header bg-success" *ngIf="client.ative else elseBlock">
+          <h5 class="modal-title" id="exampleModalLabel">Success</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="dismiss()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <ng-template #elseBlock>
+          <div class="modal-header bg-danger">
+            <h5 class="modal-title" id="exampleModalLabel">Failure</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="dismiss()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+        </ng-template>
+
+
+        <div class="modal-body">
+
+          <div class="row">
+            <div class="card" style="width: 18rem;">
+              <img src="{{ client.image.path }}" class="card-img-top img-circle"width="300" height="300" *ngIf="client.image">
+              <div class="card-body">
+              </div>
+            </div>
+            <div class="col-sm-6" style="margin-left: 10px;">
+              <strong><h1>Nome: </h1></strong><h2>{{client.fullName}}</h2>
+              <h2>Ultima mensalidade: </h2><h3>{{client.monthlyPaymentDate | date:'medium'}}</h3>
+              <div class="" *ngIf="!client.ative else elseBlockReg">
+                <a href="home/mensalidade">Regularizar o cliente?</a>
+              </div>
+              <ng-template #elseBlockReg>
+
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+      <!--</div>
+    </div>
+  </div>
+  </section>
+</div>-->

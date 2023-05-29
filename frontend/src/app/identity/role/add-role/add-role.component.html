@@ -1,0 +1,197 @@
+<!--section class="content-header">
+  <form role="form" [formGroup]="Form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-4">
+
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Role detalhes</h3>
+            </div>
+
+            <div class="card-body">
+              <div class="form-group">
+                <label for="name">Nome</label>
+                <input type="text" formControlName="name" class="form-control" id="name" placeholder="role name"
+                  minlength="3">
+              </div>
+              <div
+                *ngIf="Form.controls['name'].invalid && (Form.controls['name'].dirty || Form.controls['name'].touched)"
+                class="alert alert-danger">
+                <div *ngIf="Form.controls['name'].errors.required">
+                  Name is required.
+                </div>
+                <div *ngIf="Form.controls['name'].errors.minlength">
+                  Name must be at least 3 characters long.
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="description">Descrição</label>
+                <input type="text" formControlName="description" class="form-control" id="description"
+                  placeholder="description">
+              </div>
+
+            </div>
+
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary"
+                [disabled]="Form.pristine || Form.invalid">Adicionar</button>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-sm-4">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Add Permissions</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <div class="form-check" *ngFor="let permission of permissions">
+                  <input class="form-check-input" type="checkbox" [value]="permission.name"
+                    (change)="onCheckboxChange($event)">{{permission.name}}
+
+                </div>
+              </div>
+              <div *ngIf="this.Form.controls['permissions'].errors?.required" class="alert alert-danger">
+                <div *ngIf="Form.controls['permissions'].errors.required">
+                  Permissions is required.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-sm-4">
+
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Add Users</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <div class="form-check" *ngFor="let user of users">
+                  <input class="form-check-input" type="checkbox" [value]="user.id"
+                    (change)="onCheckboxAddUserChange($event)">{{user.email}}
+
+                </div>
+              </div>
+              <div *ngIf="this.Form.controls['users'].errors?.required" class="alert alert-danger">
+                <div *ngIf="Form.controls['users'].errors.required">
+                  Users is required.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div> 
+  </form>
+</section>-->
+<section>
+  <div class="container">
+    <div id="stepper1" class="bs-stepper">
+      <div class="bs-stepper-header">
+        <div class="step" data-target="#test-l-1">
+          <button class="step-trigger">
+            <span class="bs-stepper-circle">1</span>
+            <span class="bs-stepper-label">Role detalhes</span>
+          </button>
+        </div>
+        <div class="line"></div>
+        <div class="step" data-target="#test-l-2">
+          <button class="step-trigger">
+            <span class="bs-stepper-circle">2</span>
+            <span class="bs-stepper-label">Add Permissions</span>
+          </button>
+        </div>
+        <div class="line"></div>
+        <div class="step" data-target="#test-l-3">
+          <button class="step-trigger">
+            <span class="bs-stepper-circle">3</span>
+            <span class="bs-stepper-label">Add Users</span>
+          </button>
+        </div>
+      </div>
+      <div class="bs-stepper-content">
+        <form role="form" [formGroup]="Form" novalidate>
+          <div id="test-l-1" class="content">
+            <div class="card card-primary">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="name">Nome</label>
+                  <input type="text" formControlName="name" class="form-control" id="name" placeholder="role name"
+                    minlength="3" [ngClass]="{
+                      'is-invalid': Form.controls['name'].touched && Form.controls['name'].invalid
+                    }">
+                </div>
+                <div
+                  *ngIf="Form.controls['name'].invalid && (Form.controls['name'].dirty || Form.controls['name'].touched)"
+                  class="invalid-feedback-error">
+                  <div *ngIf="Form.controls['name'].errors.required">
+                    Name is required.
+                  </div>
+                  <div *ngIf="Form.controls['name'].errors.minlength">
+                    Name must be at least 3 characters long.
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="description">Descrição</label>
+                  <input type="text" formControlName="description" class="form-control" id="description"
+                    placeholder="description">
+                </div>
+              </div>
+            </div>
+            <button (click)="next()" class="btn btn-primary" style="margin-left: 5px;">Next <i
+                class="mdi mdi-arrow-left-thick mdi-18px mdi-rotate-180"></i></button>
+          </div>
+          <div id="test-l-2" class="content">
+            <div class="card card-primary">
+              <div class="card-body">
+                <div class="form-group">
+                  <div class="form-check" *ngFor="let permission of permissions">
+                    <input class="form-check-input" type="checkbox" [value]="permission.name"
+                      (change)="onCheckboxChange($event)">{{permission.name}}
+                  </div>
+                </div>
+                <div *ngIf="this.Form.controls['permissions'].errors?.required" class="invalid-feedback-error">
+                  <div *ngIf="Form.controls['permissions'].errors.required">
+                    Permissions is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button (click)="previous()" class="btn btn-primary"><i class="mdi mdi-arrow-left-thick mdi-18px"></i>
+              Previous</button>
+            <button (click)="next()" class="btn btn-primary" style="margin-left: 5px;">Next <i
+                class="mdi mdi-arrow-left-thick mdi-18px mdi-rotate-180"></i></button>
+          </div>
+          <div id="test-l-3" class="content">
+            <div class="card card-primary">
+              <div class="card-body">
+                <div class="form-group">
+                  <div class="form-check" *ngFor="let user of users">
+                    <input class="form-check-input" type="checkbox" [value]="user.id"
+                      (change)="onCheckboxAddUserChange($event)">{{user.email}}
+                  </div>
+                </div>
+                <div *ngIf="this.Form.controls['users'].errors?.required" class="invalid-feedback-error">
+                  <div *ngIf="Form.controls['users'].errors.required">
+                    Users is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button (click)="previous()" class="btn btn-primary"><i
+                class="mdi mdi-arrow-left-thick mdi-18px"></i>Previous</button>
+            <button type="submit" (click)="onSubmit()" [disabled]="Form.pristine || Form.invalid"
+              class="btn btn-primary" style="margin-left: 5px;">Submit <i class="mdi mdi-send mdi-rotate-315 mdi-18px"
+                style="margin-left: 7px;"></i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

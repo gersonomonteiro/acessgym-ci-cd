@@ -1,0 +1,255 @@
+<!--section class="content-header">
+  <form role="form" [formGroup]="Form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="container-fluid">
+      <div class="row mb-2">
+
+        <div class="col-sm-6">
+
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Add user</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="name">Nome</label>
+                <input type="text" formControlName="firstname" class="form-control" id="name" placeholder="nome">
+              </div>
+              <div
+                *ngIf="Form.controls['firstname'].invalid && (Form.controls['firstname'].dirty || Form.controls['firstname'].touched)"
+                class="alert alert-danger">
+                <div *ngIf="Form.controls['firstname'].errors.required">
+                  Name is required.
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="description">Apelido</label>
+                <input type="text" formControlName="lastname" class="form-control" id="apelido" placeholder="apelido">
+              </div>
+              <div
+                *ngIf="Form.controls['lastname'].invalid && (Form.controls['lastname'].dirty || Form.controls['lastname'].touched)"
+                class="alert alert-danger">
+                <div *ngIf="Form.controls['lastname'].errors.required">
+                  Apelido is required.
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="description">Telefone</label>
+                <input type="number" formControlName="phone" class="form-control" id="telefone" placeholder="telefone">
+              </div>
+              <div class="form-group">
+                <label for="description">Email</label>
+                <input type="email" formControlName="email" class="form-control" id="email" placeholder="Email">
+              </div>
+              <div
+                *ngIf="Form.controls['email'].invalid && (Form.controls['email'].dirty || Form.controls['email'].touched)"
+                class="alert alert-danger">
+                <div *ngIf="Form.controls['email'].errors.required">
+                  Email is required.
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="description">Password</label>
+                <input type="password" formControlName="password" class="form-control" id="password"
+                  placeholder="Password">
+              </div>
+              <div
+                *ngIf="Form.controls['password'].invalid && (Form.controls['password'].dirty || Form.controls['password'].touched)"
+                class="alert alert-danger">
+                <div *ngIf="Form.controls['password'].errors.required">
+                  Password is required.
+                </div>
+              </div>
+            </div>>
+
+            <div class="card-footer">
+              <button type="submit" [disabled]="Form.pristine || Form.invalid"
+                class="btn btn-primary">Adicionar</button>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Add Role</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <div class="form-check" *ngFor="let role of roles">
+                  <input class="form-check-input" type="checkbox" [value]="role.name"
+                    (change)="onCheckboxChange($event)">{{role.name}}
+
+                </div>
+              </div>
+              <div *ngIf="this.Form.controls['roles'].errors?.required" class="alert alert-danger">
+                <div *ngIf="Form.controls['roles'].errors.required">
+                  Roles is required.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </form>
+</section-->
+
+
+<section>
+  <div class="container">
+    <div id="stepper1" class="bs-stepper">
+      <div class="bs-stepper-header">
+        <div class="step" data-target="#test-l-1">
+          <button class="step-trigger">
+            <span class="bs-stepper-circle">1</span>
+            <span class="bs-stepper-label">User Informations</span>
+          </button>
+        </div>
+        <div class="line"></div>
+        <div class="step" data-target="#test-l-2">
+          <button class="step-trigger">
+            <span class="bs-stepper-circle">2</span>
+            <span class="bs-stepper-label">Add Roles</span>
+          </button>
+        </div>
+      </div>
+      <div class="bs-stepper-content">
+        <form role="form" [formGroup]="Form" novalidate>
+          <div id="test-l-1" class="content">
+            <div class="card card-primary">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="name">Nome</label>
+                  <input type="text" formControlName="firstname" class="form-control" id="name" placeholder="nome"
+                    [ngClass]="{
+                    'is-invalid': Form.controls['firstname'].touched && Form.controls['firstname'].invalid
+                  }">
+                </div>
+                <div
+                  *ngIf="Form.controls['firstname'].invalid && (Form.controls['firstname'].dirty || Form.controls['firstname'].touched)"
+                  class="invalid-feedback-error">
+                  <div *ngIf="Form.controls['firstname'].errors.required">
+                    Firstname is required.
+                  </div>
+                  <div *ngIf="Form.controls['firstname'].errors.minlength">
+                    Firstname must be at least 3 characters
+                  </div>
+                  <div *ngIf="Form.controls['firstname'].errors.maxlength">
+                    Firstname must not exceed 20 characters
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="description">Apelido</label>
+                  <input type="text" formControlName="lastname" class="form-control" id="apelido" placeholder="apelido"
+                    [ngClass]="{
+                    'is-invalid': Form.controls['lastname'].touched && Form.controls['lastname'].invalid
+                  }">
+                </div>
+                <div
+                  *ngIf="Form.controls['lastname'].invalid && (Form.controls['lastname'].dirty || Form.controls['lastname'].touched)"
+                  class="invalid-feedback-error">
+                  <div *ngIf="Form.controls['lastname'].errors.required">
+                    Lastname is required.
+                  </div>
+                  <div *ngIf="Form.controls['lastname'].errors.minlength">
+                    Username must be at least 3 characters
+                  </div>
+                  <div *ngIf="Form.controls['lastname'].errors.maxlength">
+                    Username must not exceed 20 characters
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="description">Telefone</label>
+                  <input type="number" formControlName="phone" class="form-control" id="telefone"
+                    placeholder="telefone">
+                </div>
+                <div class="form-group">
+                  <label for="description">Email</label>
+                  <input type="email" formControlName="email" class="form-control" id="email" placeholder="Email"
+                    [ngClass]="{
+                    'is-invalid': Form.controls['email'].touched && Form.controls['email'].invalid && Form.controls['email'].errors
+                  }">
+                </div>
+                <div
+                  *ngIf="Form.controls['email'].invalid && (Form.controls['email'].dirty || Form.controls['email'].touched)"
+                  class="invalid-feedback-error">
+                  <div *ngIf="Form.controls['email'].errors.required">
+                    Email is required.
+                  </div>
+                  <div *ngIf="Form.controls['email'].errors.email">Email is invalid</div>
+                </div>
+                <div class="form-group">
+                  <label for="description">Password</label>
+                  <div class="input-group mb-3">
+                    <input [type]="fieldTextType ? 'text' : 'password'" formControlName="password" class="form-control"
+                      id="password" placeholder="Password" [ngClass]="{
+                      'is-invalid': Form.controls['password'].touched && Form.controls['password'].invalid
+                    }">
+                    <div class="input-group-append">
+                      <div class="input-group-text" style="background-color: #fff;">
+                        <i class="fa fa-eye-slash" [ngClass]="{
+                            'fa-eye-slash': !fieldTextType,
+                            'fa-eye': fieldTextType
+                          }" (click)="toggleFieldTextType()">
+                        </i>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="Form.controls['password'].invalid && (Form.controls['password'].dirty || Form.controls['password'].touched)"
+                    class="invalid-feedback-error">
+                    <div *ngIf="Form.controls['password'].errors.required">
+                      Password is required.
+                    </div>
+                    <div *ngIf="Form.controls['password'].errors.minlength">
+                      Password must be at least 6 characters
+                    </div>
+                    <div *ngIf="Form.controls['password'].errors.maxlength">
+                      Username must not exceed 40 characters
+                    </div>
+                  </div>
+                  <app-strong-password [passwordToCheck]="Form.value.password"
+                    (passwordStrength)="passwordValid($event)"></app-strong-password>
+                </div>
+              </div>
+            </div>
+
+            <button (click)="previous()" class="btn btn-primary"><i class="mdi mdi-arrow-left-thick mdi-18px"></i>
+              Previous</button>
+            <button (click)="next()" class="btn btn-primary" style="margin-left: 5px;">Next <i
+                class="mdi mdi-arrow-left-thick mdi-18px mdi-rotate-180"></i></button>
+
+          </div>
+          <div id="test-l-2" class="content">
+            <div class="card card-primary">
+              <div class="card-body">
+                <div class="form-group">
+                  <div class="form-check" *ngFor="let role of roles">
+                    <input class="form-check-input" type="checkbox" [value]="role.name"
+                      (change)="onCheckboxChange($event)">{{role.name}}
+
+                  </div>
+                </div>
+                <div *ngIf="this.Form.controls['roles'].errors?.required" class="invalid-feedback-error">
+                  <div *ngIf="Form.controls['roles'].errors.required">
+                    Roles is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button (click)="previous()" class="btn btn-primary"><i
+                class="mdi mdi-arrow-left-thick mdi-18px"></i>Previous</button>
+            <button type="submit" (click)="onSubmit()" [disabled]="Form.pristine || Form.invalid || !passwordIsValid"
+              class="btn btn-primary" style="margin-left: 5px;">Submit <i class="mdi mdi-send mdi-rotate-315 mdi-18px"
+                style="margin-left: 7px;"></i></button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
