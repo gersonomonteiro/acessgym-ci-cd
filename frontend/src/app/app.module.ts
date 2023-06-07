@@ -51,7 +51,7 @@ import { BarComponent } from './home/charts/bar/bar.component';
 import { PolarComponent } from './home/charts/polar/polar.component';
 import { ReciboComponent } from './mensalidade/recibo/recibo.component';
 import { AddReciboComponent } from './mensalidade/add-recibo/add-recibo.component';
-const config: SocketIoConfig = { url: 'http://localhost:8080', options: {} }
+const config: SocketIoConfig = { url: 'http://host.docker.internal:8080', options: {} }
 
 @NgModule({
     declarations: [

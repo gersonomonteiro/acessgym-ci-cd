@@ -1,116 +1,143 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-const path = require('path')
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const path = require("path");
+const fs = require("fs");
+const socketIO = require("socket.io");
+const ioClient = require("socket.io-client");
+const Readline = require("@serialport/parser-readline");
+const SerialPort = require("serialport");
 
-app = express()
-const http = require('http')
-const server = http.Server(app)
+app = express();
+const http = require("http");
+const server = http.Server(app);
+const io = socketIO(server);
 
-const socketIO = require('socket.io')
-const io = socketIO(server)
-const Readline = require('@serialport/parser-readline')
-const SerialPort = require('serialport')
+const authRouter = require("./routes/auth.routes");
+const userRouter = require("./routes/user.routes");
+const clientRouter = require("./routes/client.routes");
+const roleRouter = require("./routes/role.routes");
+const permissionRouter = require("./routes/permission.routes");
+const accessRouter = require("./routes/access.routes");
+const receiptRouter = require("./routes/receipt.routes");
+const helper = require("./helper/helper");
+const constants = require("./config/constants.config");
+const { authJwt } = require("./middleware");
 
-const authRouter = require('./routes/auth.routes')
-const userRouter = require('./routes/user.routes')
-const clientRouter = require('./routes/client.routes')
-const roleRouter = require('./routes/role.routes')
-const permissionRouter = require('./routes/permission.routes')
-const accessRouter = require('./routes/access.routes')
-const receiptRouter = require('./routes/receipt.routes')
-const helper = require('./helper/helper')
-
-const { authJwt } = require('./middleware')
-
-require('./database')
-helper.setup()
-helper.disableInspiredClient()
-helper.sendClientNotificationByEmail()
+require("./database");
+helper.setup();
+helper.disableInspiredClient();
+helper.sendClientNotificationByEmail();
 
 var corsOptions = {
-    origin: 'http://localhost:4200',
-    origin: 'https://acessgym.cv',
-}
+  origin: "http://localhost:4200",
+  origin: "https://acessgym.cv",
+};
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
-app.use(bodyParser.json())
-
-// parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }))
-
-// database
-// const db = require("./models");
-// const Role = db.role;
-
-//db.sequelize.sync();
-// force: true will drop the table if it already exists
-/*db.sequelize.sync({ force: true }).then(() => {
-    console.log('Drop and Resync Database with { force: true }');
-    initial();
-});*/
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // routes
-app.use('/api', authRouter)
-app.use('/api', userRouter)
-app.use('/api', roleRouter)
-app.use('/api', permissionRouter)
-app.use('/api', clientRouter)
-app.use('/api/uploads', express.static(path.join(__dirname, '..', '/uploads')))
-app.use('/api', accessRouter)
-app.use('/api', receiptRouter)
+app.use("/api", authRouter);
+app.use("/api", userRouter);
+app.use("/api", roleRouter);
+app.use("/api", permissionRouter);
+app.use("/api", clientRouter);
+app.use("/api/uploads", express.static(path.join(__dirname, "..", "/uploads")));
+app.use("/api", accessRouter);
+app.use("/api", receiptRouter);
 /*
-const mySerial = new SerialPort('COM3', {
-    baudRate: 9600,
-})
-const parser = mySerial.pipe(new Readline())
+const mySerial = new SerialPort("COM3", {
+  baudRate: 9600,
+});
 
-mySerial.on('open', function () {
-    console.log('Opened Port.')
-})
-mySerial.on('err', function (data) {
-    console.log(err.message)
-})
+const parser = mySerial.pipe(new Readline());
 
-parser.on('data', function (data) {
-    console.log(data)
-    if (data !== '0' && data !== '1') {
-        io.emit('arduino:data', {
-            value: data,
-        })
+mySerial.on("open", function () {
+  console.log("Opened Port.");
+});
+mySerial.on("err", function (data) {
+  console.log(err.message);
+});
+
+parser.on("data", function (data) {
+  console.log(data);
+  if (data !== "0" && data !== "1") {
+    io.emit("arduino:data", {
+      value: data,
+    });
+  }
+});
+*/
+// Função para ler o conteúdo do arquivo
+
+const filePath = path.join(__dirname, "/shared", "dataCard.txt");
+const ledFilePath = path.join(__dirname, "/shared", "ledData.txt");
+
+const readData = () => {
+  fs.readFile(filePath, "utf8", (err, data) => {
+    if (err) {
+      console.error("Erro ao ler o ficheiro:", err);
+      return;
     }
     
-})
+    if (data.length > 4) {
+      io.emit("arduino:data", {
+        value: data,
+      });
+    }
+    
+  });
+};
 
-app.post('/api/arduinoled', [authJwt.verifyToken], (req, res) => {
-    mySerial.write(req.body.code, (err) => {
-        if (err) {
-          console.error('Erro ao escrever na porta serial:', err);
-        } else {
-            res.send()
-        }
+const limpar = (data) => {
+  fs.writeFile(filePath, "", (err) => {
+    if (err) {
+      console.error("Erro ao limpar o ficheiro:", err);
+    }
+  });
+};
 
-    });
-}) 
-*/ 
-app.post('/send-notification', (req, res) => {
-    const data = { data: req.body.data }
-    console.log(data)
-    io.emit('arduino:data', {
-        value: req.body.data,
-    }) // Updates Live Notification
-    res.send(data)
-})
-app.get('/', (req, res) => {    
-    res.send({message:'AcessGym UP and Running'})
-})
+fs.watchFile(filePath, (curr, prev) => {
+  if (curr.mtime > prev.mtime && curr.size > 1)  {
+    readData();
+    setTimeout(() => {
+      limpar();
+    }, 2000);
+  }
+});
+
+const escrever = (data) => {
+  fs.appendFile(ledFilePath, `${data}\n`, (err) => {
+    if (err) {
+      console.error("Erro ao escrever no ficheiro: ", err);
+    }
+  });
+};
+
+app.post("/api/arduinoled", [authJwt.verifyToken], (req, res) => {
+  escrever(req.body.code)  
+});
+
+app.post("/send-notification", (req, res) => {
+  const data = { data: req.body.data };  
+  io.emit("arduino:data", {
+    value: req.body.data,
+  });
+  res.send(data);
+});
+
+app.get("/", (req, res) => {
+  res.send({ message: "AcessGym UP and Running" });
+});
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`)
-})
+  console.log(`Server is running on port ${PORT}.`);
+});
 
-module.exports = server
+module.exports = server;
