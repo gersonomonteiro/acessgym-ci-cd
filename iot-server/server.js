@@ -13,7 +13,7 @@ const ledFilePath = "../backend/src/shared/ledData.txt";
 // Função para escrever os dados no arquivo
 const writeFl = (data) => {
   clearFile(ledFilePath);
-  fs.appendFile(filePath, `${data}\n`, (err) => {
+  fs.appendFile(filePath, data, (err) => {
     if (err) {
       console.error("Erro ao escrever no arquivo:", err);
     }
@@ -53,17 +53,17 @@ fs.watchFile(ledFilePath, (curr, prev) => {
       });
     });
     
-    setTimeout(() => {
+    /*setTimeout(() => {
       clearFile(ledFilePath);
-    }, 1000);
+    }, 1000);*/
   }
 });
 
 // Evento disparado quando há leitura de dados da porta serial
 parser.on("data", (data) => {
-  if (data !== "0" && data !== "1" && data.length > 0) {
-    console.log(data);
-    writeFl(data);
+  if (data !== "0" && data !== "1" && data.trim() !== '' && data.length > 0 ) {
+    clearFile(filePath);
+    writeFl(data.trim());
   }
 });
 

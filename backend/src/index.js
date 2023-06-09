@@ -5,8 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const socketIO = require("socket.io");
 const ioClient = require("socket.io-client");
-const Readline = require("@serialport/parser-readline");
-const SerialPort = require("serialport");
+
 
 app = express();
 const http = require("http");
@@ -83,7 +82,7 @@ const readData = () => {
       console.error("Erro ao ler o ficheiro:", err);
       return;
     }
-    
+    console.log(data.length);
     if (data.length > 4) {
       io.emit("arduino:data", {
         value: data,
@@ -102,24 +101,33 @@ const limpar = (data) => {
 };
 
 fs.watchFile(filePath, (curr, prev) => {
-  if (curr.mtime > prev.mtime && curr.size > 1)  {
+  if (curr.mtime > prev.mtime && curr.size > 1 && curr.size <= 8)  {
     readData();
     setTimeout(() => {
       limpar();
-    }, 2000);
+    }, 1000);
   }
 });
 
-const escrever = (data) => {
-  fs.appendFile(ledFilePath, `${data}\n`, (err) => {
+const escrever = (data, callback) => {
+  fs.appendFile(ledFilePath, data, (err) => {    
     if (err) {
       console.error("Erro ao escrever no ficheiro: ", err);
+      callback(err);
     }
+    callback(null);
   });
 };
 
 app.post("/api/arduinoled", [authJwt.verifyToken], (req, res) => {
-  escrever(req.body.code)  
+  console.log("data: ",req.body.code);
+  escrever(req.body.code, (err) => {
+    if (err) {
+      console.error("Erro ao gravar os dados:", err);
+    } else {
+      return res.json()
+    }
+  })
 });
 
 app.post("/send-notification", (req, res) => {

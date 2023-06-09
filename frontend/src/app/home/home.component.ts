@@ -77,7 +77,9 @@ export class HomeComponent implements OnInit {
     public onCardRoaded() {
         this.socket.on('arduino:data', (data) => {
             //observer.next(data);
+            console.log(data.value)
             this.cardCode = data.value
+            
             const cardCodeJson = { cardCode: data.value.trim() }
             this.clientService.show(cardCodeJson).subscribe((res) => {
                 if (res.client) {
