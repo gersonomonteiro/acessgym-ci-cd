@@ -12,7 +12,7 @@ services:
       MYSQL_DATABASE: acessgym
     volumes:
       - ./mysql/scripts:/docker-entrypoint-initdb.d
-      - ./mysql/conf/my.cnf:/etc/mysql/my.cnf
+      #- ./mysql/conf/my.cnf:/etc/mysql/my.cnf
       - mysql-data:/var/lib/mysql
   frontend:
     build: ./frontend
