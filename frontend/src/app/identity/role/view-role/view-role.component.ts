@@ -42,6 +42,7 @@ export class ViewRoleComponent implements OnInit {
     updatedPermission: string[] = []
     showBtn: boolean = false
     iditIcon: boolean = true
+    desabled: boolean = false
 
     constructor(
         private route: ActivatedRoute,
@@ -95,6 +96,9 @@ export class ViewRoleComponent implements OnInit {
                 this.user.push(this.role.users[index].email)
                 this.log(this.role.users[index].id)
                 users.push(new FormControl(this.role.users[index].id))
+            }
+            if (this.role.name === 'Admin') {
+                this.desabled = true;
             }
         })
     }

@@ -134,7 +134,7 @@ export class ProfileComponent implements OnInit {
                 console.log(res)
                 //this.Form.reset();
                 this.ToasterSuccess(res.user)
-                location.reload()
+                //location.reload()
             },
             (err) => {
                 //this.errorData = err.error.errors

@@ -25,7 +25,7 @@ services:
       - backend
     volumes:
       - frontend_node_modules:/usr/src/app/node_modules
-      - ./frontend/src:/usr/src/app/src
+      - ./frontend/src:/app/src
   backend:
     build: ./backend
     command: sh -c "npm run migrate && node src/index.js"

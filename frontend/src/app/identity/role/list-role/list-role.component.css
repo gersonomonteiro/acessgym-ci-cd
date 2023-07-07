@@ -46,3 +46,15 @@ table.table td a.delete {
 table.table td i {
   font-size: 24px;
 }
+
+a.disabled {
+  color: gray !important;
+  pointer-events: none;
+  cursor: not-allowed !important;
+}
+
+a.desabledAdmin {
+  color: gray !important;
+  pointer-events: none;
+  cursor: not-allowed !important;
+}

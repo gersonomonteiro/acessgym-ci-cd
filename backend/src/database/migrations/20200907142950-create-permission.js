@@ -33,6 +33,7 @@ module.exports = {
             { name: 'READ_USER', description: 'Ver Utilizador', createdAt: new Date(), updatedAt: new Date() },
             { name: 'UPDATE_USER', description: 'Atualizar Utilizador', createdAt: new Date(), updatedAt: new Date() },
             { name: 'DELETE_USER', description: 'Apagar Utilizador', createdAt: new Date(), updatedAt: new Date() },
+            { name: 'INTERNAL', description: 'Internal', createdAt: new Date(), updatedAt: new Date() },
 
           ]);
     },

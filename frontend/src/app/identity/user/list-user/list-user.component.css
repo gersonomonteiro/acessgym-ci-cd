@@ -60,3 +60,25 @@ table.table td i {
   .text-danger {
       color: #ff5b5b;
   }
+
+  a.disabled {
+    color: gray !important;
+    pointer-events: none;
+    cursor: not-allowed !important;
+  }
+  
+  a.desabledMyuser {
+    color: gray !important;
+    pointer-events: none;
+    cursor: not-allowed !important;
+  }
+  a.desabledButtonForOtherUser {
+    color: gray !important;
+    pointer-events: none;
+    cursor: not-allowed !important;
+  }
+  a.desabledButtonForAdmin {
+    color: gray !important;
+    pointer-events: none;
+    cursor: not-allowed !important;
+  }

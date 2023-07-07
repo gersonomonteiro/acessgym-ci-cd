@@ -222,27 +222,43 @@ module.exports = {
                           "DELETE_USER"
                       ]
                     }
+                    
                     const url = `${constants.URL_BASE}/api/setuprole/1`
-                    /*fetch(url, {
-                      method: "post",
-                      headers: {
-                        'Content-Type': 'application/json'
-                      },
-                      body: JSON.stringify(data)
-                    })
-                    .then((res) => {
-                      console.log("Resposta completa:", res);
-                    })
-                    .then((data) => {
-                      console.log("Resposta JSON:", data);
-                    })
-                    .catch((err) => console.log(err));*/
                     
                     this.sendRequest(url, 'POST', data).then((response) => {
                       console.log('Role Atualizado com sucesso!')
                     }).catch((err) => {
                       console.log(err.message)
                     })
+                    
+                    let role = {
+                      name: "internal",
+                      description:
+                        "Role que todo utilizador tem ao ser criado!",
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                    };
+          
+                    let role_permission = {
+                      role_id: 2,
+                      permission_id: 5,
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                    };
+
+                    inserirDados(roleQuery, role, (err) => {
+                      if (err) {
+                        console.error("Erro ao criar role: ", err);
+                        return;
+                      }
+                    })
+                    inserirDados(rolePermissionQuery, role_permission, (err) => {
+                      if (err) {
+                        console.error("Erro ao criar role_permission: ", err);
+                        return;
+                      }
+                    })
+
                     console.log("Setup feito com sucesso!");
                     const setupUpdate = Configuration.update(
                       {

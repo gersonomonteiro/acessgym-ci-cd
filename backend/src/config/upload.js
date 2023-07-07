@@ -14,7 +14,7 @@ exports.uploads = {
         },
     }),
     limits: {
-        fileSize: 1024 * 1024, // Define o tamanho máximo do arquivo em bytes (1MB neste exemplo)
+        fileSize: 2048 * 2048, // Define o tamanho máximo do arquivo em bytes (2MB neste exemplo)
     },
     fileFilter: (req, file, cb) => {
         // Define o tipo de arquivo permitido como imagem

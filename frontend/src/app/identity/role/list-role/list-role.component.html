@@ -109,9 +109,9 @@
                     </td>
                     <td>
                       <a class="edit" title="Edit" data-toggle="tooltip" [routerLink]="['/home/role']"
-                        [queryParams]="{idRole:role.id}"><i class="material-icons">&#xE254;</i></a>
+                        [queryParams]="{idRole:role.id}" [ngClass]="{ 'disabled': isDisabled(role.name),  'desabledAdmin': desabledButtonForAdmin(role.name)}"><i class="material-icons">&#xE254;</i></a>
                       <a class="delete" title="Delete" data-toggle="tooltip"
-                        (click)="openConfirmationDialog(role.id, i)"><i class="material-icons">&#xE872;</i></a>
+                        (click)="openConfirmationDialog(role.id, i)" [ngClass]="{ 'disabled': isDisabled(role.name),  'desabledAdmin': desabledButtonForAdmin(role.name)}"><i class="material-icons">&#xE872;</i></a>
                     </td>
 
                 </tbody>
