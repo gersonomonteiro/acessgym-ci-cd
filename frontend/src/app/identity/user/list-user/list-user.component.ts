@@ -1,10 +1,41 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { User } from "src/app/_model/user";
+//import { User } from "src/app/_model/user";
 import { NotificacaoService } from "src/app/_services/notificacao/notificacao.service";
 import { RoleService } from "src/app/_services/role/role.service";
 import { UserService } from "src/app/_services/user/user.service";
 import { ConfirmationDialogService } from "../../../shered/confirmation-dialog/confirmation-dialog.service";
-import { TokenStorageService } from "src/app/_services/auth/token-storage.service";
+import { TokenStorageService } from "src/app/_services/auth/token-storage.service"
+import { constants } from "src/app/common/constants/backend"
+
+interface User {
+  id: number;
+  firstname: string;
+  lastname: string;
+  phone: string;
+  email: string;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+  image: {
+    path: string;
+  } | null;
+  roles: Role[];
+}
+
+interface Role {
+  id: number;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  user_roles: {
+    createdAt: string;
+    updatedAt: string;
+    user_id: number;
+    role_id: number;
+  };
+  permission: [];
+}
 
 @Component({
   selector: "app-list-user",
@@ -19,7 +50,7 @@ export class ListUserComponent implements OnInit {
   myEmail;
   userEmail;
   rolesTemp;
-  avatarBaseUrl: string = "http://localhost:8080/api/uploads/";
+  avatarBaseUrl: string = `${constants.BASE_API_URL}/uploads/`;
   avatarApiUrl: string = "https://ui-avatars.com/api/?background=random&name=";
 
   page = 1;
@@ -41,7 +72,6 @@ export class ListUserComponent implements OnInit {
       this.collectionSize = this.users.length;
     });
     this.myEmail = this.tokenStorage.getUserEmail();
-
     this.getNumeroRole();
   }
 
@@ -57,12 +87,6 @@ export class ListUserComponent implements OnInit {
   }
   desabledButtonForOtherUser(email: any, id: any): boolean {
     return id === 1 && this.myEmail != email;
-  }
-  apagar(email) {
-    /*this.userService.getUserByEmail({ email: email }).subscribe((res) => {
-      this.rolesTemp = res.user.roles;
-    });*/
-    return this.rolesTemp.some((role: any) => role.name === "Admin");
   }
 
   onClickMe() {

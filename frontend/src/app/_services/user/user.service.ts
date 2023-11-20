@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
+import { constants } from "src/app/common/constants/backend"
 
-const API_URL = 'http://localhost:8080/api/user'
+const API_URL = `${constants.BASE_API_URL}/user`
 
 @Injectable({
     providedIn: 'root',

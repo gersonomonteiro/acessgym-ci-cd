@@ -102,21 +102,24 @@ module.exports = {
                                     res.send(err)
                                 } else {
                                     let options = {
-                                        height: '11.25in',
-                                        width: '8.5in',
+                                        height: '17.25in',
+                                        width: '13.5in',
                                         header: {
-                                            height: '20mm',
+                                            height: '30mm',
                                         },
                                         footer: {
-                                            height: '20mm',
+                                            height: '30mm',
                                         },
+                                        format: 'Letter',
+                                        phantomPath: '/usr/src/app/node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs'
                                     }
-
+                                    
                                     pdf.create(data, options).toFile(
                                         `uploads/${fileName}`,
                                         function (err, data) {
                                             if (err) {
-                                                res.send(err)
+                                                //res.send(err)
+                                                console.log(err)
                                             } else {
                                                 res.send({
                                                     message:
@@ -132,7 +135,7 @@ module.exports = {
                     .catch((err) => {
                         return res.status(422).json({
                             message: 'Falha em criar recibo!',
-                            error: err.message,
+                            error: err,
                         })
                     })
             })

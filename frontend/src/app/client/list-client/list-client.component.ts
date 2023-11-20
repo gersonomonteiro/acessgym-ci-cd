@@ -4,6 +4,7 @@ import { Client } from 'src/app/_model/client'
 import { ClientService } from 'src/app/_services/client/client.service'
 import { NotificacaoService } from 'src/app/_services/notificacao/notificacao.service'
 import { ModalService } from '../modal/modal.service'
+import { constants } from "src/app/common/constants/backend"
 
 @Component({
     selector: 'app-list-client',
@@ -12,7 +13,7 @@ import { ModalService } from '../modal/modal.service'
 })
 export class ListClientComponent implements OnInit {
     clients: Client[]
-    avatarBaseUrl: string = 'http://localhost:8080/api/uploads/'
+    avatarBaseUrl: string = `${constants.BASE_API_URL}/uploads/`
     avatarApiUrl: string = 'https://ui-avatars.com/api/?background=random&name='
 
     page = 1

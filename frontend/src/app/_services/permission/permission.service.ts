@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { constants } from "src/app/common/constants/backend"
 
-
-const PERMISSION_API_URL = "http://localhost:8080/api";
+const PERMISSION_API_URL = `${constants.BASE_API_URL}`;
 
 @Injectable({
   providedIn: 'root'

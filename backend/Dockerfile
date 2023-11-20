@@ -17,4 +17,5 @@ COPY . .
 EXPOSE 8080
 #RUN npx sequelize init
 #RUN npx sequelize db:migrate
+RUN npm run migrate
 CMD [ "node", "src/index.js" ]

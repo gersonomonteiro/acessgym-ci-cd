@@ -20,6 +20,12 @@ services:
     restart: unless-stopped
     ports:
       - 4200:4200
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4200"]
+      interval: 5s
+      timeout: 3s
+      start_period: 25s
+      retries: 2
     depends_on:
       - mysql
       - backend
@@ -33,6 +39,12 @@ services:
     restart: unless-stopped
     ports:
       - 8080:8080
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080"]
+      interval: 5s
+      timeout: 3s
+      start_period: 20s
+      retries: 2
     devices:
       - /dev/ttyS2:/dev/ttyACM0
     depends_on:
@@ -40,7 +52,9 @@ services:
     volumes:
       - backend_node_modules:/usr/src/app/node_modules
       - ./backend/src:/usr/src/app/src
+      - backend_uploads:/usr/src/app/uploads
 volumes:
     frontend_node_modules:
     backend_node_modules:
+    backend_uploads:
     mysql-data:

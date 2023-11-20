@@ -98,28 +98,26 @@ export class EditClientComponent implements OnInit {
     this.ativeCamera()
   }*/
 
-    onSubmit(): void {
+    onSubmit(id): void {
         const formData = new FormData()
 
         formData.append('fullName', this.Form.get('fullName').value)
         formData.append('phone', this.Form.get('phone').value)
         formData.append('email', this.Form.get('email').value)
-        formData.append('genre', this.Form.get('genre').value)
+        //formData.append('genre', this.Form.get('genre').value)
         formData.append('address', this.Form.get('address').value)
         formData.append('birthday', this.Form.get('birthday').value)
         //formData.append('cardCode', this.Form.get('cardCode').value)
         formData.append('image', this.Form.get('img').value)
 
-        this.clientService.store(formData).subscribe(
+        this.clientService.update(formData, id).subscribe(
             (client) => {
-                console.log(client)
                 this.ToasterSuccess(client.message)
                 this.Form.reset()
                 //window.location.reload()
                 this.decline()
             },
             (err) => {
-                console.log(err)
                 this.ToasterError(err, 'Error', '')
             }
         )
@@ -130,8 +128,7 @@ export class EditClientComponent implements OnInit {
         const ative = {
             ative: this.value,
         }
-        console.log(id)
-        console.log(ative)
+        
         this.clientService.update(ative, id).subscribe(
             (res) => {
                 this.ToasterSuccess(res.message)

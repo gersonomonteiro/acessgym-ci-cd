@@ -2,6 +2,7 @@ const User = require('../models/User')
 const Image = require('../models/Image')
 const { update } = require('../models/User')
 const bcrypt = require('bcryptjs')
+const constants = require('../config/constants.config')
 
 module.exports = {
     async index(req, res) {
@@ -45,7 +46,7 @@ module.exports = {
             .then((user) => {
                 if (user) {
                     if (user.image) {
-                        user.image.path = `http://localhost:8080/api/uploads/${user.image.path}`
+                        user.image.path = `${constants.URL_IMAGE}/api/uploads/${user.image.path}`
                     }
 
                     return res.json({ user })
@@ -81,7 +82,7 @@ module.exports = {
                 ],
             }
         )
-        console.log(user)
+        
         return res.json(user)
     },
 
@@ -96,7 +97,7 @@ module.exports = {
             email,
             ative,
         }
-        console.log(data)
+        
         const user = await User.update(data, {
             where: {
                 id: req.params.id,
@@ -134,7 +135,7 @@ module.exports = {
                                     }
                                 )
                             }
-                            console.log(image)
+                            
                             return res.json({ user, image })
                         })
                         .catch(function (err) {

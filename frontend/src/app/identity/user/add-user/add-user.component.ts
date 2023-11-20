@@ -130,7 +130,6 @@ export class AddUserComponent implements OnInit {
       (user) => {
         this.ToasterSuccess(user.message);
         this.Form.reset();
-        window.location.reload();
       },
       (err) => {
         this.ToasterError(err, "Error", "");

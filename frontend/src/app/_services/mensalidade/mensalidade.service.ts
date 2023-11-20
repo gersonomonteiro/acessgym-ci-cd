@@ -4,7 +4,7 @@ import { Observable } from 'rxjs'
 
 import { constants } from '../../common/constants/backend'
 
-const API_URL = 'http://localhost:8080/api'
+
 
 @Injectable({
     providedIn: 'root',
@@ -12,11 +12,16 @@ const API_URL = 'http://localhost:8080/api'
 export class MensalidadeService {
     constructor(private http: HttpClient) {}
 
+    private API_URL = `${constants.BASE_API_URL}`
+    
     show(FilterBydata): Observable<any> {
-        return this.http.post(`${API_URL}/receipts`, FilterBydata)
+        return this.http.post(`${this.API_URL}/receipts`, FilterBydata)
     }
 
     store(monthlyPayment): Observable<any> {
-        return this.http.post(`${API_URL}/receipt`, monthlyPayment)
+        return this.http.post(`${this.API_URL}/receipt`, monthlyPayment)
+    }
+    remove(id): Observable<any> {
+        return this.http.delete(`${this.API_URL}/receipt/${id}`, id);
     }
 }

@@ -49,6 +49,10 @@ export class DonutComponent implements OnInit {
                             this.isOthers += 1
                             break
                         }
+                        case '': {
+                            this.isOthers += 1
+                            break
+                        }
                         default: {
                             break
                         }

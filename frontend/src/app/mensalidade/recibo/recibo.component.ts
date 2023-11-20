@@ -3,6 +3,7 @@ import { EmailService } from 'src/app/_services/email/email.service'
 import { MensalidadeService } from 'src/app/_services/mensalidade/mensalidade.service'
 import { NotificacaoService } from 'src/app/_services/notificacao/notificacao.service'
 import { ModalService } from '../../client/modal/modal.service'
+import { constants } from '../../common/constants/backend'
 import {
     AbstractControl,
     FormArray,
@@ -18,8 +19,8 @@ import * as moment from 'moment'
     templateUrl: './recibo.component.html',
     styleUrls: ['./recibo.component.css'],
 })
-export class ReciboComponent implements OnInit {
-    RECIBO_BASE_URL: string = 'http://localhost:8080/api/uploads/'
+export class ReciboComponent implements OnInit {    
+    RECIBO_BASE_URL: string = `${constants.BASE_API_URL}/uploads/`
     recibos: []
     clients: []
     
@@ -71,16 +72,27 @@ export class ReciboComponent implements OnInit {
             }
         )
     }
-    apagar() {
-        console.log('this.yearAndMonth')
-    }
+    removeRecibo(id, index) {
+        this.mensalidadeService.remove(id).subscribe(
+          (recibo) => {
+            this.ToasterSuccess(recibo.message);
+            this.recibos.splice(index, 1);
+            //window.location.reload()
+          },
+          (err) => {
+            console.log(err);
+            this.ToasterError(err, "Error", "");
+          }
+        );
+        console.log(`role id ${id}`);
+      }
     update() {
         this.startOptions.maxDate = this.endDate
         this.endOptions.minDate = this.startDate
 
         const FilterBydata = {
             from: (new Date(this.startDate).getFullYear()) + '-' +(new Date(this.startDate).getMonth()+1).toString().padStart(2, '0') + '-' + (new Date(this.startDate).getDate().toString().padStart(2, '0')),
-            to: (new Date(this.endDate).getFullYear()) + '-' +(new Date(this.endDate).getMonth()+1).toString().padStart(2, '0')+ '-' + (new Date(this.endDate).getDate().toString().padStart(2, '0')),
+            to: (new Date(this.endDate).getFullYear()) + '-' +(new Date(this.endDate).getMonth()+1).toString().padStart(2, '0')+ '-' + (new Date(this.endDate).getDate()+1).toString().padStart(2, '0'),
         }
         this.getMensalidade(FilterBydata)
     }

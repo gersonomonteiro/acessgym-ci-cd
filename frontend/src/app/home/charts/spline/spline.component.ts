@@ -96,7 +96,7 @@ export class SplineComponent implements OnInit {
     arrayOthersHr: number[]
     //public contentLoaded: boolean = false
     @Output() contentLoaded = new EventEmitter<boolean>()
-    constructor(private accessService: AccessService) {}
+    constructor(private accessService: AccessService) { }
 
     ngOnInit() {
         this.nAcessoHj()
@@ -208,7 +208,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[0]
                         ) {
                             this.manHr5++
@@ -217,7 +217,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[1]
                         ) {
                             this.manHr6++
@@ -226,7 +226,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[2]
                         ) {
                             this.manHr7++
@@ -235,7 +235,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[3]
                         ) {
                             this.manHr8++
@@ -244,7 +244,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[4]
                         ) {
                             this.manHr9++
@@ -253,7 +253,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[5]
                         ) {
                             this.manHr10++
@@ -262,7 +262,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[6]
                         ) {
                             this.manHr11++
@@ -271,7 +271,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[7]
                         ) {
                             this.manHr12++
@@ -280,7 +280,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[8]
                         ) {
                             this.manHr13++
@@ -289,7 +289,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[9]
                         ) {
                             this.manHr14++
@@ -298,7 +298,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[10]
                         ) {
                             this.manHr15++
@@ -307,7 +307,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[11]
                         ) {
                             this.manHr16++
@@ -316,7 +316,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[12]
                         ) {
                             this.manHr17++
@@ -325,7 +325,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[13]
                         ) {
                             this.manHr18++
@@ -334,7 +334,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[14]
                         ) {
                             this.manHr19++
@@ -343,7 +343,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[15]
                         ) {
                             this.manHr20++
@@ -352,7 +352,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[16]
                         ) {
                             this.manHr21++
@@ -363,7 +363,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[0]
                         ) {
                             this.womanHr5++
@@ -372,7 +372,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[1]
                         ) {
                             this.womanHr6++
@@ -381,7 +381,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[2]
                         ) {
                             this.womanHr7++
@@ -390,7 +390,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[3]
                         ) {
                             this.womanHr8++
@@ -399,7 +399,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[4]
                         ) {
                             this.womanHr9++
@@ -408,7 +408,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[5]
                         ) {
                             this.womanHr10++
@@ -417,7 +417,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[6]
                         ) {
                             this.womanHr11++
@@ -426,7 +426,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[7]
                         ) {
                             this.womanHr12++
@@ -435,7 +435,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[8]
                         ) {
                             this.womanHr13++
@@ -444,7 +444,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[9]
                         ) {
                             this.womanHr14++
@@ -453,7 +453,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[10]
                         ) {
                             this.womanHr15++
@@ -462,7 +462,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[11]
                         ) {
                             this.womanHr16++
@@ -471,7 +471,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[12]
                         ) {
                             this.womanHr17++
@@ -480,7 +480,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[13]
                         ) {
                             this.womanHr18++
@@ -489,7 +489,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[14]
                         ) {
                             this.womanHr19++
@@ -498,7 +498,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[15]
                         ) {
                             this.womanHr20++
@@ -507,18 +507,19 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[16]
                         ) {
                             this.womanHr21++
                         }
                     }
-                    if (this.access[index].client.genre === 'Outros') {
+                    if (this.access[index].client.genre === 'Outros' || this.access[index].client.genre === '') {
+
                         if (
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[0]
                         ) {
                             this.othersHr5++
@@ -527,7 +528,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[1]
                         ) {
                             this.othersHr6++
@@ -536,7 +537,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[2]
                         ) {
                             this.othersHr7++
@@ -545,7 +546,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[3]
                         ) {
                             this.othersHr8++
@@ -554,7 +555,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[4]
                         ) {
                             this.othersHr9++
@@ -563,22 +564,16 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[5]
                         ) {
                             this.othersHr10++
-
-                            console.log(
-                                new Date(
-                                    this.access[index].createdAt
-                                ).getUTCHours()
-                            )
                         }
                         if (
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[6]
                         ) {
                             this.othersHr11++
@@ -587,7 +582,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[7]
                         ) {
                             this.othersHr12++
@@ -596,7 +591,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[8]
                         ) {
                             this.othersHr13++
@@ -605,7 +600,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[9]
                         ) {
                             this.othersHr14++
@@ -614,7 +609,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[10]
                         ) {
                             this.othersHr15++
@@ -623,7 +618,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[11]
                         ) {
                             this.othersHr16++
@@ -632,7 +627,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[12]
                         ) {
                             this.othersHr17++
@@ -641,7 +636,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[13]
                         ) {
                             this.othersHr18++
@@ -650,7 +645,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[14]
                         ) {
                             this.othersHr19++
@@ -659,7 +654,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[15]
                         ) {
                             this.othersHr20++
@@ -668,7 +663,7 @@ export class SplineComponent implements OnInit {
                             new Date(
                                 this.access[index].createdAt
                             ).getUTCHours() -
-                                1 ===
+                            1 ===
                             hr[16]
                         ) {
                             this.othersHr21++

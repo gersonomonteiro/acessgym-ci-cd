@@ -137,7 +137,7 @@
                   <a class="view" title="View" data-toggle="tooltip" [ngClass]="{ 'desabledButtonForOtherUser': desabledButtonForOtherUser(user.email, user.id)}"><i class="material-icons">&#xE417;</i></a>
                   <a class="edit" title="Edit" data-toggle="tooltip"*ngxPermissionsOnly="['UPDATE_USER']" [ngClass]="{ 'desabledButtonForOtherUser': desabledButtonForOtherUser(user.email, user.id)}"><i class="material-icons">&#xE254;</i></a>
                   <a class="delete" title="Delete" data-toggle="tooltip" *ngxPermissionsOnly="['DELETE_USER']"
-                    (click)="openConfirmationDialog(user.id, index)" [ngClass]="{ 'disabled': isSuperadmin(user.id), 'desabledMyuser': desabledButtonForMyUser(user.email), 'desabledButtonForAdmin': apagar(user.email)}"><i class="material-icons">&#xE872;</i></a>
+                    (click)="openConfirmationDialog(user.id, index)" [ngClass]="{ 'disabled': isSuperadmin(user.id), 'desabledMyuser': desabledButtonForMyUser(user.email)}"><i class="material-icons">&#xE872;</i></a>
                 </td>
               </tr>
             </tbody>

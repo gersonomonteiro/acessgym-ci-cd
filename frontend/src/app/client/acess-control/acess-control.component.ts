@@ -46,8 +46,7 @@ export class AcessControlComponent implements OnInit {
         this.dataSuccess = {
             cardCode: this.client.cardCode,
             status: status,
-        }
-
+        }        
         this.accessService.store(this.dataSuccess).subscribe(
             (data) => {
                 console.log(data)
