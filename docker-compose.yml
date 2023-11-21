@@ -7,6 +7,12 @@ services:
     restart: unless-stopped
     ports:
       - 3307:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-uroot", "-pjmYFW28LuQmVXCo9tLB1"]
+      interval: 5s
+      timeout: 10s
+      retries: 2
+      start_period: 20s
     environment:
       MYSQL_ROOT_PASSWORD: jmYFW28LuQmVXCo9tLB1
       MYSQL_DATABASE: acessgym
