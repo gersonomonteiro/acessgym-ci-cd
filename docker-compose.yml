@@ -40,7 +40,7 @@ services:
       - ./frontend/src:/app/src
   backend:
     build: ./backend
-    command: src/init_script.sh
+    command: sh -c "src/init_script.sh"
     container_name: backend-accessgym
     restart: unless-stopped
     ports:
