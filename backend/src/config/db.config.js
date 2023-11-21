@@ -2,8 +2,8 @@ module.exports = {
     username: 'root',
     password: 'jmYFW28LuQmVXCo9tLB1',
     database: 'acessgym',
-    host: 'host.docker.internal',
-    port: '3307',
+    host: 'mysql',
+    port: '3306',
     dialect: 'mysql',
     pool: {
         max: 5,
