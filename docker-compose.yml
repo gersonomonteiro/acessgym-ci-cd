@@ -40,7 +40,7 @@ services:
       - ./frontend/src:/app/src
   backend:
     build: ./backend
-    command: sh -c "src/init_script.sh"
+    command: sh -c "npm run migrate && node src/index.js"
     container_name: backend-accessgym
     restart: unless-stopped
     ports:
