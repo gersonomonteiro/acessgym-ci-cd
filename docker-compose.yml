@@ -37,10 +37,10 @@ services:
       - backend
     volumes:
       - frontend_node_modules:/usr/src/app/node_modules
-      - ./frontend/src:/app/src
+      #- ./frontend/src:/app/src
   backend:
     build: ./backend
-    #command: sh -c "npm run migrate && node src/index.js"
+    command: sh -c "npm run migrate && node src/index.js"
     container_name: backend-accessgym
     restart: unless-stopped
     ports:
@@ -57,7 +57,7 @@ services:
       - mysql
     volumes:
       - backend_node_modules:/usr/src/app/node_modules
-      - ./backend/src:/usr/src/app/src
+      #- ./backend/src:/usr/src/app/src
       - backend_uploads:/usr/src/app/uploads
 volumes:
     frontend_node_modules:
