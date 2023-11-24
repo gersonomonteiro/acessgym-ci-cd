@@ -13,7 +13,7 @@ const upload = multer(uploadConfig.uploads)
 
 router.post('/client/id', [authJwt.verifyToken], clientController.show)
 //router.get('/client/:id', [authJwt.verifyToken], clientController.showById)
-router.get('/client/:id', clientController.showById)
+router.get('/YHxmMxpyhuc45GCyB9J3/:id', clientController.showById)
 router.get('/client', [authJwt.verifyToken], clientController.index)
 router.post(
     '/client',

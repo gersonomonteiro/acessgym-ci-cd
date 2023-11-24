@@ -37,7 +37,7 @@ services:
       - backend
     volumes:
       - frontend_node_modules:/usr/src/app/node_modules
-      #- ./frontend/src:/app/src
+      #- ./frontend/src:/app/src descomentar parao setup local
   backend:
     build: ./backend
     command: sh -c "npm run migrate && node src/index.js"
@@ -57,7 +57,7 @@ services:
       - mysql
     volumes:
       - backend_node_modules:/usr/src/app/node_modules
-      #- ./backend/src:/usr/src/app/src
+      #- ./backend/src:/usr/src/app/src   #descomentar parao setup local
       - backend_uploads:/usr/src/app/uploads
 volumes:
     frontend_node_modules:
