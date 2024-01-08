@@ -49,6 +49,8 @@ describe('Teste unitario de API que retorna role por ID', () => {
                     res.body.role.should.have.property('name')
                 done()
                 })
+            
         })
     })
+    
 })
