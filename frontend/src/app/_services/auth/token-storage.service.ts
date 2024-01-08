@@ -28,6 +28,10 @@ export class TokenStorageService {
     return localStorage.getItem(TOKEN_KEY);
   }
 
+  public removeToken() {
+    localStorage.removeItem(TOKEN_KEY);
+  }
+
   public saveUserEmail(user) {
     this.encryptUserEmail = CryptoJS.AES.encrypt(user.email, this.secret);
     window.localStorage.removeItem(USER_KEY);
