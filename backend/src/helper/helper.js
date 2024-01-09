@@ -116,7 +116,7 @@ module.exports = {
         }
       })
       .then((setup) => {
-        if (setup.value === 'true') {
+        if (setup.value === 'false') {
           console.log("...Iniciando o setup...");
 
           const dbConfigNovo = Object.assign({}, dbConfig, { user: "root" });
@@ -151,7 +151,7 @@ module.exports = {
             firstname: "Super",
             lastname: "admin",
             phone: "9730357",
-            email: "superadmin1.accessgym@gmail.com",
+            email: "superadmin.accessgym@gmail.com",
             password: bcrypt.hashSync(password, 8),
             ative: true,
             createdAt: new Date(),
