@@ -9,7 +9,7 @@ const morgan = require('morgan');
 
 app = express();
 
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log/access.log'), { flags: 'a' })
+const accessLogStream = fs.createWriteStream(path.join(__dirname, '/log', 'access.log'), { flags: 'a' })
 app.use(morgan('combined', { stream: accessLogStream }))
 
 const http = require("http");
