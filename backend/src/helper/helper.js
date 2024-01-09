@@ -3,6 +3,7 @@ const fetch = require("node-fetch");
 const mysql = require("mysql2");
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 const constants = require("../config/constants.config");
+const authConfig = require("../config/auth.config");
 const Mailjet = require("node-mailjet");
 const config = require("../config/mailjet.json");
 const bcrypt = require('bcryptjs')
@@ -115,7 +116,7 @@ module.exports = {
         }
       })
       .then((setup) => {
-        if (setup.value === 'false') {
+        if (setup.value === 'true') {
           console.log("...Iniciando o setup...");
 
           const dbConfigNovo = Object.assign({}, dbConfig, { user: "root" });
@@ -150,7 +151,7 @@ module.exports = {
             firstname: "Super",
             lastname: "admin",
             phone: "9730357",
-            email: "superadmin.accessgym@gmail.com",
+            email: "superadmin1.accessgym@gmail.com",
             password: bcrypt.hashSync(password, 8),
             ative: true,
             createdAt: new Date(),
@@ -294,7 +295,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       const request = new XMLHttpRequest();
       request.open(method, url, true);
-      //request.setRequestHeader("Authorization", "Bearer " + token);
+      request.setRequestHeader("Authorization", "Bearer " + authConfig.TOKEN_INTERNAL);
       request.setRequestHeader("Content-Type", "application/json");
 
       request.onload = () => {

@@ -24,10 +24,8 @@ exports.verifyToken = (req, res, next) => {
 };
 
 exports.verificarAutorizacao = (req, res, next) => {
-  let token = req.headers["Authorization"];
-  console.log(token)
-  let tokenEsperado = 'Bearer Z0GZzHtvuGOldUWAvz3D'
-  console.log(tokenEsperado)
+  let token = req.headers["authorization"];
+  let tokenEsperado = `Bearer ${config.TOKEN_INTERNAL}`
   if (token === tokenEsperado) {
     return next();    
   }else{

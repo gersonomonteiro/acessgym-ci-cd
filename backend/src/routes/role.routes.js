@@ -19,7 +19,7 @@ router.post(
     roleController.roleUpdateUser
 )
 router.delete('/role/:id', [authJwt.verifyToken], roleController.remove)
-router.post('/setuprole/:id', roleController.roleAddPermission)
+router.post('/setuprole/:id', [authJwt.verificarAutorizacao], roleController.roleAddPermission)
 
 module.exports = router
 
