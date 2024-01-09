@@ -5,9 +5,13 @@ const path = require("path");
 const fs = require("fs");
 const socketIO = require("socket.io");
 const ioClient = require("socket.io-client");
-
+const morgan = require('morgan');
 
 app = express();
+
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log/access.log'), { flags: 'a' })
+app.use(morgan('combined', { stream: accessLogStream }))
+
 const http = require("http");
 const server = http.Server(app);
 const io = socketIO(server);
@@ -145,7 +149,7 @@ app.get("/", (req, res) => {
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+  console.log(`Server is running on port ${PORT}.`); 
 });
 
 module.exports = server;

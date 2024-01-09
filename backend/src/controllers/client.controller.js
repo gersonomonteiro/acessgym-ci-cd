@@ -117,7 +117,6 @@ module.exports = {
                 monthlyPaymentDate: new Date(),
             }
         }
-        console.log(data)
         const client = Client.findOne({
             where: {
                 cardCode: cardCode,

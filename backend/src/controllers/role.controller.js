@@ -96,9 +96,6 @@ module.exports = {
                                                             },
                                                         })
                                                             .then((users) => {
-                                                                console.log(
-                                                                    users
-                                                                )
                                                                 role.setUsers(
                                                                     users
                                                                 )
@@ -291,7 +288,6 @@ module.exports = {
                             },
                         })
                             .then((users) => {
-                                console.log(users)
                                 role.setUsers(users)
                                     .then(() => {
                                         res.send({
