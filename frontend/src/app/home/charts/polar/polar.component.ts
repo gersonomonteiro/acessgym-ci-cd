@@ -177,7 +177,6 @@ export class PolarComponent implements OnInit {
                             75
                     ) {
                         this.othersAge++
-                        console.log(this.othersAge)
                     }
                 }
             }

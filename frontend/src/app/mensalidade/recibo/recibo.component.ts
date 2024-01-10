@@ -67,7 +67,6 @@ export class ReciboComponent implements OnInit {
                 this.ToasterSuccess(res.message)
             },
             (err) => {
-                console.log(err)
                 this.ToasterError(err, 'Error', '')
             }
         )
@@ -84,7 +83,6 @@ export class ReciboComponent implements OnInit {
             this.ToasterError(err, "Error", "");
           }
         );
-        console.log(`role id ${id}`);
       }
     update() {
         this.startOptions.maxDate = this.endDate

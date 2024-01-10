@@ -36,7 +36,6 @@ export class AcessControlComponent implements OnInit {
             }
             this.accessService.arduinoLed(greenLedOn).subscribe(
                 (data) => {
-                    console.log(data)
                 },
                 (err) => {
                     console.log(err)
@@ -49,7 +48,6 @@ export class AcessControlComponent implements OnInit {
         }        
         this.accessService.store(this.dataSuccess).subscribe(
             (data) => {
-                console.log(data)
             },
             (err) => {
                 console.log(err)

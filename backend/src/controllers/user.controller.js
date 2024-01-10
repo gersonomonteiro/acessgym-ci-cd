@@ -136,13 +136,17 @@ module.exports = {
                                 )
                             }
                             
-                            return res.json({ user, image })
+                            return res.json({
+                                message: 'User update successfully!',
+                            })
                         })
                         .catch(function (err) {
                             return res.json(err)
                         })
                 } else {
-                    return res.json(user)
+                    return res.json({
+                        message: 'User update successfully!',
+                    })
                 }
             })
             .catch(function (err) {
@@ -163,7 +167,7 @@ module.exports = {
                     })
                 } else {
                     return res.json({
-                        message: 'user deleted successfully!',
+                        message: 'User deleted successfully!',
                     })
                 }
             })

@@ -48,10 +48,9 @@ export class HomeComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.onCardRoaded()
+        //this.onCardRoaded()
         this.numberOfClients()
         this.totalAcessoHj()
-        console.log(`contentLoaded: ${this.contentLoaded}`)
     }
 
     logout() {
@@ -74,7 +73,7 @@ export class HomeComponent implements OnInit {
         })
     }
 
-    public onCardRoaded() {
+    /*public onCardRoaded() {
         this.socket.on('arduino:data', (data) => {
             //observer.next(data);
             console.log(data.value)
@@ -83,6 +82,7 @@ export class HomeComponent implements OnInit {
             const cardCodeJson = { cardCode: data.value.trim() }
             this.clientService.show(cardCodeJson).subscribe((res) => {
                 if (res.client) {
+                    console.log("dja entra")
                     this.modalService.openAcessControllModal('', '', res.client)                  
                     
                 } else {
@@ -120,7 +120,7 @@ export class HomeComponent implements OnInit {
                     'User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'
                 )
             )
-        }    
+        }  */  
 
     totalAcessoHj() {
         let accessData

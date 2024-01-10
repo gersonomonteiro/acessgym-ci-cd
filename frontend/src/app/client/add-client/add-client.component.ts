@@ -35,7 +35,7 @@ export class AddClientComponent implements OnInit {
       email: ['', Validators.required],
       genre: [''],
       address: [''],
-      birthday: [moment().toDate()],
+      birthday: [moment("01/01/2000", "DD/MM/YYYY")],
       cardCode: [this.cardCode, Validators.required],
       img: [null],
     })

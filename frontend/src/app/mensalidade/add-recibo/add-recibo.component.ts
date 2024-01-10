@@ -88,7 +88,6 @@ export class AddReciboComponent implements OnInit {
     }
 
     send(values) {
-        console.log(values);
         this.mensalidadeService.store(values).subscribe(
             (mensalidade) => {
                 this.ToasterSuccess(mensalidade.message)
@@ -117,13 +116,11 @@ export class AddReciboComponent implements OnInit {
 
     public saveCode(e): void {
         let find = this.clients.find((x) => x.email === e.target.value)
-        console.log(typeof find)
         if (typeof find === 'undefined') {
             this.undefined = true
             this.Form.get('client_id').setValue('')
             console.log('no tem user')
         } else {
-            console.log(find.id)
             this.undefined = false
             this.Form.get('client_id').setValue(find.id)
         }

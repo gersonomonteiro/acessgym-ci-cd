@@ -133,7 +133,7 @@ export class ProfileComponent implements OnInit {
             (res) => {
                 console.log(res)
                 //this.Form.reset();
-                this.ToasterSuccess(res.user)
+                this.ToasterSuccess(res.message)
                 //location.reload()
             },
             (err) => {
