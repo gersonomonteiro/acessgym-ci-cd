@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms'
 import { TokenStorageService } from '../_services/auth/token-storage.service'
 import { AuthService } from '../_services/auth/auth.service'
 import { NotificacaoService } from '../_services/notificacao/notificacao.service'
+import { ErrorHandlerService } from '../_helpers/error-handler.service'
 
 @Component({
     selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
         private tokenStorage: TokenStorageService,
         private router: Router,
         private formBuilder: FormBuilder,
-        private notificacaoService: NotificacaoService
+        private notificacaoService: NotificacaoService,
+        private errorHandler: ErrorHandlerService // Injete o serviço de tratamento de erro
     ) {
         this.Form = this.formBuilder.group({
             email: ['', Validators.required, Validators.email],
@@ -61,29 +63,12 @@ export class LoginComponent implements OnInit {
             (err) => {
                 this.loading = false
                 this.loginFailed = true
-
-                //this.errorData = error.error.errors
-                this.errMsg = err
-                this.ToasterError(err, '', {
+                const errorMessage = this.errorHandler.getErrorMessage(err);
+                this.ToasterError(errorMessage, '', {
                     timeOut: 30000,
-                })
-                /*if (this.errorData) {
-                    for (let i = 0; i < this.errorData.length; i++) {
-                        this.ToasterError(
-                            this.errorData[i].msg,
-                            this.errorData[i].param,
-                            {
-                                timeOut: 30000,
-                            }
-                        )
-                    }
-                }
+                })              
 
-                if (error.error.message.length > 0) {
-                    this.ToasterError(error.error.message, 'Error', {
-                        timeOut: 30000,
-                    })
-                }*/
+                
             }
         )
     }

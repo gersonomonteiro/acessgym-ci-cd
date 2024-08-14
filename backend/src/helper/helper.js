@@ -48,6 +48,16 @@ module.exports = {
       return false;
     }
   },
+  isSubscriptionExpired(subscriptionDate) {
+    const currentDate = new Date();
+    
+    // Adiciona 30 dias à data de inscrição
+    const expirationDate = new Date(subscriptionDate);
+    expirationDate.setMonth(expirationDate.getMonth() + 1);
+  
+    // Verifica se a data atual é posterior à data de expiração
+    return currentDate > expirationDate;
+  },
   diffDays(dayTocheck, data) {
     const currentDate = new Date();
     const dbDate = new Date(data);
@@ -157,7 +167,10 @@ module.exports = {
             createdAt: new Date(),
             updatedAt: new Date(),
           };
-          const userQuery = "INSERT INTO users SET ?";
+          const addUserQuery = "INSERT INTO users SET ?";
+          const addRoleQuery = "INSERT INTO roles SET ?";
+          const addRolePermissionQuery = "INSERT INTO role_permissions SET ?";
+          const addUserRoleQuery = "INSERT INTO user_roles SET ?";
 
           const role = {
             name: "superadmin",
@@ -167,16 +180,12 @@ module.exports = {
             updatedAt: new Date(),
           };
 
-          const roleQuery = "INSERT INTO roles SET ?";
-
           const role_permission = {
             role_id: 1,
             permission_id: 1,
             createdAt: new Date(),
             updatedAt: new Date(),
           };
-
-          const rolePermissionQuery = "INSERT INTO role_permissions SET ?";
 
           const user_role = {
             user_id: 1,
@@ -185,42 +194,50 @@ module.exports = {
             updatedAt: new Date(),
           };
 
-          const userRoleQuery = "INSERT INTO user_roles SET ?";
 
-            inserirDados(userQuery, user, (err) => {
+            inserirDados(addUserQuery, user, (err) => {
               if (err) {
                 console.error("Erro ao criar Utilizador: ", err);
                 return;
               }
 
-              console.log("Utilizador adicionado.");
+              console.log("Utilizador superadmin adicionado.");
 
-              inserirDados(roleQuery, role, (err) => {
+              inserirDados(addRoleQuery, role, (err) => {
                 if (err) {
                   console.error("Erro ao criar Role: ", err);
                   return;
                 }
-                console.log("Role adicionado.");
+                console.log("Role superadmin adicionado.");
 
-                inserirDados(rolePermissionQuery, role_permission, (err) => {
+                inserirDados(addRolePermissionQuery, role_permission, (err) => {
                   if (err) {
                     console.error("Erro ao criar Role_permission: ", err);
                     return;
                   }
                   console.log("Role_permission adicionado.");
 
-                  inserirDados(userRoleQuery, user_role, (err) => {
+                  inserirDados(addUserRoleQuery, user_role, (err) => {
                     if (err) {
                       console.error("Erro ao criar User_role: ", err);
                       return;
                     }
+                    
                     console.log("User_role adicionado.");
                     const data = {
                       permissions: [
                           "CREATE_USER",
                           "READ_USER",
                           "UPDATE_USER",
-                          "DELETE_USER"
+                          "DELETE_USER",
+                          "CREATE_ROLE",
+                          "READ_ROLE",
+                          "UPDATE_ROLE",
+                          "DELETE_ROLE",
+                          "CREATE_CLIENT",
+                          "READ_CLIENT",
+                          "UPDATE_CLIENT",
+                          "DELETE_CLIENT"
                       ]
                     }
                     
@@ -242,21 +259,21 @@ module.exports = {
           
                     let role_permission = {
                       role_id: 2,
-                      permission_id: 5,
+                      permission_id: 1,
                       createdAt: new Date(),
                       updatedAt: new Date(),
                     };
 
-                    inserirDados(roleQuery, role, (err) => {
+                    inserirDados(addRoleQuery, role, (err) => {
                       if (err) {
                         console.error("Erro ao criar role: ", err);
                         return;
                       }
                     })
-                    inserirDados(rolePermissionQuery, role_permission, (err) => {
+                    inserirDados(addRolePermissionQuery, role_permission, (err) => {
                       if (err) {
                         console.error("Erro ao criar role_permission: ", err);
-                        return;
+                        return; 
                       }
                     })
 

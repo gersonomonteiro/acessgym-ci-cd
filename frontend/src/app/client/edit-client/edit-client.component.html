@@ -136,7 +136,9 @@
       <div class="col-sm-3">
         <div class="form-group">
           <div class="custom-file" *ngIf="avatar">
-            <i class="fas fa-times" style="position: absolute; cursor: pointer;" (click)=removeAvatar()></i>
+            <i class="fas fa-times close-icon" (click)=removeAvatar()>
+              <span class="tooltip-text">Remover imagem</span>
+            </i>
             <img [src]="avatar" height="100">
           </div>
           <!--<app-camera (pictureTaken)="handleImage($event)" *ngIf="isAtive"></app-camera>

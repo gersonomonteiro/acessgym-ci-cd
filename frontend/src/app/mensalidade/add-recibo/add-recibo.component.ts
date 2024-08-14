@@ -38,9 +38,7 @@ export class AddReciboComponent implements OnInit {
             client_id: ['', Validators.required],
             monthlyPayment: this.formBuilder.array([
                 this.formBuilder.group({
-                    month: ['', Validators.required],
-                    price: 0,
-                    discount: 0,
+                    month: ['', Validators.required]
                 })]),
         })
     }
@@ -95,7 +93,8 @@ export class AddReciboComponent implements OnInit {
                 window.location.reload()
             },
             (err) => {
-                this.ToasterError(err.message, 'Error', '')
+                console.log(err)
+                this.ToasterError(err, 'Error', '')
             }
         )
     }

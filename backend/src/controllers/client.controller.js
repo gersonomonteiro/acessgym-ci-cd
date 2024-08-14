@@ -263,11 +263,11 @@ module.exports = {
             .then((client) => {
                 if (client.length > 0) {                    
                     for (let index = 0; index < client.length; index++) {
+                        // Exemplo de uso
+                        const userSubscriptionDate = new Date(client[index].monthlyPaymentDate); // Data de inscrição do usuário
+                        const expired = helper.isSubscriptionExpired(userSubscriptionDate);
                         if (
-                            helper.dateCompare(
-                                client[index].monthlyPaymentDate,
-                                new Date()
-                            )
+                            expired
                         ) {
                             const data = {
                                 ative: false,

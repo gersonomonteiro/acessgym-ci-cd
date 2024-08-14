@@ -25,6 +25,7 @@ export class AddClientComponent implements OnInit {
   avatar: any;
   options: any = {format: 'YYYY/MM/DD'};
   //isAtive: boolean = false;
+  fileSizeError: string = '';
 
   constructor(private formBuilder: FormBuilder,private activeModal: NgbActiveModal,
     private clientService: ClientService,private notificacaoService: NotificacaoService) {
@@ -71,9 +72,29 @@ export class AddClientComponent implements OnInit {
   fileName: string
 
   onSelectFile(event) {
+
+    // Verifica o tamanho do arquivo (em bytes)
+    const maxSizeInMB = 3;
+    const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+    const file = (event.target as HTMLInputElement).files[0];
+
+    if (file.size > maxSizeInBytes) {
+      this.fileSizeError = `O tamanho da imagem não pode exceder ${maxSizeInMB} MB.`;
+      this.fileName = '';  // Reseta o nome do arquivo
+      this.avatar = null;  // Reseta a imagem do avatar
+      this.Form.patchValue({
+          img: null,
+      });
+      this.Form.get("img").updateValueAndValidity();
+      return;  // Sai da função sem processar o arquivo
+    }
+
+    this.fileSizeError = '';  // Reseta a mensagem de erro, se o arquivo estiver ok
+    this.fileName = file.name;
+
     // called each time file input changes
     let reader = new FileReader(); // HTML5 FileReader API
-    const file = (event.target as HTMLInputElement).files[0];
+    
     reader.readAsDataURL(file); // read file as data url
     this.fileName = file.name
     reader.onload = () => {

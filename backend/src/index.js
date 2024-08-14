@@ -8,8 +8,8 @@ const ioClient = require("socket.io-client");
 const morgan = require('morgan');
 
 app = express();
-
-const accessLogStream = fs.createWriteStream(path.join(__dirname, '/log', 'access.log'), { flags: 'a' })
+const logFileName = `${new Date().getDate().toString().padStart(2, '0')}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getFullYear()}-access.log`;
+const accessLogStream = fs.createWriteStream(path.join(__dirname, '/log', logFileName), { flags: 'a' })
 app.use(morgan('combined', { stream: accessLogStream }))
 
 const http = require("http");
@@ -32,10 +32,10 @@ helper.setup();
 helper.disableInspiredClient();
 helper.sendClientNotificationByEmail();
 
-var corsOptions = {
-  origin: "http://localhost:4200",
-  origin: "https://acessgym.cv",
-};
+const corsOptions = [
+  "http://localhost:4200",
+  "https://acessgym.cv"
+];
 
 app.use(cors(corsOptions));
 
