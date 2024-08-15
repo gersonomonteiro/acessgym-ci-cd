@@ -30,7 +30,7 @@
                 <div class="input-group">
                   <select class="form-control" formControlName="month">
                     <option [ngValue]="null">--Mês--</option>
-                    <option *ngFor="let mes of meses">{{mes}}</option>
+                    <option *ngFor="let mes of getFilteredMeses(i)">{{mes}}</option>
                   </select>
                 </div>
                 <!-- /.input group -->
@@ -38,18 +38,20 @@
             </div>
             <div class="col-sm-3 nopadding">
               <div class="form-group">
-                <input type="number" formControlName="price" class="form-control" id="preco" name="preco"
-                  placeholder="preço">
+                <select class="form-control" formControlName="price">
+                  <option *ngFor="let preco of precoOptions" [ngValue]="preco">{{preco}}</option>
+              </select>
               </div>
             </div>
             <div class="col-sm-3 nopadding">
               <div class="form-group">
-                <input type="number" formControlName="discount" class="form-control" id="disconto" name="disconto"
-                  placeholder="disconto">
+                <select class="form-control" formControlName="discount">
+                  <option *ngFor="let desconto of descontoOptions" [ngValue]="desconto">{{desconto}}%</option>
+              </select>
               </div>
             </div>
             <div class="col-sm-3 nopadding">
-              <button class="btn btn-success" type="button" (click)="addMensalidade()"> <i
+              <button class="btn btn-success" type="button" (click)="addMensalidade()" [disabled]="isAddButtonDisabled()"> <i
                   class="mdi mdi-plus-outline mdi-16px"></i>
               </button>
               <button class="btn btn-danger" type="button" (click)="removeMensalidade(i)" style="margin-left: 5px;"

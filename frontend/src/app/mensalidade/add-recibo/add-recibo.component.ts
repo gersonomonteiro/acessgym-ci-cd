@@ -25,7 +25,11 @@ export class AddReciboComponent implements OnInit {
     Form: any
     clients: Client[]
     addMesCount = 0;
-    meses = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+    meses = ["janeiro", "fevereiro", "marco", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+    mesesDisponiveis: string[] = [];
+    precoOptions = [1000, 1500, 2000, 2500];
+    descontoOptions = [0, 5, 10, 15, 20, 25, 30];
+
     undefined = false
     constructor(
         private mensalidadeService: MensalidadeService,
@@ -38,7 +42,9 @@ export class AddReciboComponent implements OnInit {
             client_id: ['', Validators.required],
             monthlyPayment: this.formBuilder.array([
                 this.formBuilder.group({
-                    month: ['', Validators.required]
+                    month: ['', Validators.required],
+                    price: this.precoOptions[0],
+                    discount: this.descontoOptions[0],
                 })]),
         })
     }
@@ -48,8 +54,8 @@ export class AddReciboComponent implements OnInit {
         mensalidade.push(
             this.formBuilder.group({
                 month: ['', Validators.required],
-                price: 0,
-                discount: 0,
+                price: this.precoOptions[0],
+                discount: this.descontoOptions[0]
             })
         )
     }
@@ -76,10 +82,15 @@ export class AddReciboComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.atualizarMesesDisponiveis();
         this.cliente()        
     }
-
+    atualizarMesesDisponiveis() {
+        const currentMonth = new Date().getMonth(); // Obtém o mês atual (0-11)
+        this.mesesDisponiveis = this.meses.slice(currentMonth); // Filtra os meses a partir do mês atual
+    }
     cliente() {
+        
         this.clientService.index().subscribe((res) => {
             this.clients = res.client
         })
@@ -98,19 +109,20 @@ export class AddReciboComponent implements OnInit {
             }
         )
     }
+    getFilteredMeses(i: number): string[] {
+        const selectedMonths = this.Form.value.monthlyPayment.map((item) => item.month);
+        return this.mesesDisponiveis.filter(mes => !selectedMonths.includes(mes) || mes === this.Form.value.monthlyPayment[i].month);
+    }
+
+    isAddButtonDisabled(): boolean {
+        const selectedMonths = this.Form.value.monthlyPayment.map((item) => item.month);
+        return selectedMonths.length >= this.mesesDisponiveis.length;
+    }
 
     isDuplicate(valeuForm){
         const monthlyPayment = valeuForm.monthlyPayment
-        let temp = []
-        for (let index = 0; index < monthlyPayment.length; index++) {
-            temp.push(monthlyPayment[index].month)            
-        }
-        const isDuplicate = temp.some((item, index) => index !== temp.indexOf(item));
-        if (!isDuplicate) {
-            return false
-        } else { 
-            return true
-        }
+        const temp = monthlyPayment.map(payment => payment.month);
+        return temp.some((item, index) => temp.indexOf(item) !== index);
     }
 
     public saveCode(e): void {

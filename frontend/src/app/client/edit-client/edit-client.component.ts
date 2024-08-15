@@ -34,7 +34,7 @@ export class EditClientComponent implements OnInit {
         this.Form = this.formBuilder.group({
             fullName: ['', Validators.required],
             phone: ['', Validators.required],
-            email: ['', Validators.required],
+            email: [''],
             address: ['', Validators.required],
             birthday: [moment().toDate(), Validators.required],
             //cardCode: [this.cardCode, Validators.required],

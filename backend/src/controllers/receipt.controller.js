@@ -53,21 +53,43 @@ module.exports = {
             attributes: ['fullName', 'email'],
         })
             .then((client) => {
+                const monthNames = {
+                    janeiro: 0, fevereiro: 1, marco: 2, abril: 3, maio: 4, junho: 5,
+                    julho: 6, agosto: 7, setembro: 8, outubro: 9, novembro: 10, dezembro: 11
+                };
+                let lastMonthPaid = monthNames[req.body.monthlyPayment[0].month];
+                let monthName
                 const listPrice = []
-                const listDiscount = []
-                for (const item of req.body.monthlyPayment) {
-                    listPrice.push(item.price)
-                    listDiscount.push(item.discount)
+                for (let i = 0; i < req.body.monthlyPayment.length; i++) {
+                    const item = req.body.monthlyPayment[i];
+
+                    if (item.price <= 0){
+                        return res.status(400).json({
+                            message: 'Valor invalido!',
+                        })
+                    }
+                    const priceAfterDiscount = item.price * (1 - item.discount / 100);
+                    listPrice.push(priceAfterDiscount)
+                    const currentMonth = monthNames[item.month];
+                    // Verifica se o mês atual está em sequência
+                    if (i > 0 && (currentMonth - lastMonthPaid !== 1)) {
+                        return res.status(400).json({
+                            message: 'Sequencia de mês invalida!',
+                        });
+                    }
+
+                        lastMonthPaid = currentMonth;
+                        monthName = item.month
+                        console.log(lastMonthPaid)
                 }
-                const totalPayment =
-                    listPrice.reduce((x, y) => x + y) -
-                    listDiscount.reduce((x, y) => x + y)
+                
+                
+                const totalPayment = listPrice.reduce((x, y) => x + y, 0);
 
                 const clientName = client.fullName
                 const timestamp = Date.now()
                 const fileName =
                     clientName.replace(/\s+/g, '_') + '_' + timestamp + '.pdf'
-
                 const createReceipt = Receipt.create(
                     {
                         client_id: req.body.client_id,
@@ -85,57 +107,64 @@ module.exports = {
                     }
                 )
                     .then((createReceipt) => {
-                        const receipt = {
-                            receiptNumber: timestamp,
-                            createdAt: createReceipt.createdAt.toDateString(),
-                            clientName: clientName,
-                            totalPayment: totalPayment,
-                            monthlyPayment: req.body.monthlyPayment,
-                        }
-                        ejs.renderFile(
-                            path.join(__dirname, '../views/', 'template.ejs'),
-                            {
-                                receipt: receipt,
-                            },
-                            (err, data) => {
-                                if (err) {
-                                    res.send(err)
-                                } else {
-                                    let options = {
-                                        height: '17.25in',
-                                        width: '13.5in',
-                                        header: {
-                                            height: '30mm',
-                                        },
-                                        footer: {
-                                            height: '30mm',
-                                        },
-                                        format: 'Letter',
-                                        phantomPath: '/usr/src/app/node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs'
-                                    }
-                                    
-                                    pdf.create(data, options).toFile(
-                                        `uploads/${fileName}`,
-                                        function (err, data) {
-                                            if (err) {
-                                                //res.send(err)
-                                                console.log(err)
-                                            } else {
-                                                res.send({
-                                                    message:
-                                                        'Recibo criado com sucesso!',
-                                                })
-                                            }
+                        const currentYear = new Date().getFullYear();
+                        const currentDay = new Date().getDate();
+                        const lastPaymentDate = new Date(currentYear, monthNames[monthName], currentDay);
+                        Client.update({ monthlyPaymentDate: lastPaymentDate, ative: 1 }, {
+                                where: { id: req.body.client_id },
+                        }).then(() => {
+                            const receipt = {
+                                receiptNumber: timestamp,
+                                createdAt: createReceipt.createdAt.toDateString(),
+                                clientName: clientName,
+                                totalPayment: totalPayment,
+                                monthlyPayment: req.body.monthlyPayment,
+                             }
+                            ejs.renderFile(
+                                path.join(__dirname, '../views/', 'template.ejs'),
+                                {
+                                    receipt: receipt,
+                                },
+                                (err, data) => {
+                                    if (err) {
+                                        res.send(err)
+                                    } else {
+                                        let options = {
+                                            height: '17.25in',
+                                            width: '13.5in',
+                                            header: {
+                                                height: '30mm',
+                                            },
+                                            footer: {
+                                                height: '30mm',
+                                            },
+                                            format: 'Letter',
+                                            phantomPath: '/usr/src/app/node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs'
                                         }
-                                    )
+                                        
+                                        pdf.create(data, options).toFile(
+                                            `uploads/${fileName}`,
+                                            function (err, data) {
+                                                if (err) {
+                                                    //res.send(err)
+                                                    console.log(err)
+                                                } else {
+                                                    res.send({
+                                                        message:
+                                                            'Recibo criado com sucesso!',
+                                                    })
+                                                }
+                                            }
+                                        )
+                                    }
                                 }
-                            }
-                        )
-                    })
+                            )
+                        })
+                        })
                     .catch((err) => {
                         return res.status(422).json({
                             message: 'Falha em criar recibo!',
-                            error: err,
+                            error: err.message,
                         })
                     })
             })

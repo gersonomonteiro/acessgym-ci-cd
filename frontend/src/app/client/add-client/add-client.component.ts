@@ -33,7 +33,7 @@ export class AddClientComponent implements OnInit {
     this.Form = this.formBuilder.group({
       fullName: ['', Validators.required],
       phone: [''],
-      email: ['', Validators.required],
+      email: [''],
       genre: [''],
       address: [''],
       birthday: [moment("01/01/2000", "DD/MM/YYYY")],
