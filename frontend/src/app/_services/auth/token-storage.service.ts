@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import * as CryptoJS from "crypto-js";
+import { jwtDecode } from "jwt-decode";
 
 const TOKEN_KEY = "auth-token";
 const USER_KEY = "auth-user";
@@ -46,4 +47,18 @@ export class TokenStorageService {
     ).toString(CryptoJS.enc.Utf8);
     return this.decryptUserEmail;
   }
+
+    // Função para extrair as roles do token JWT
+  public getUserRolesFromToken(): string[] | null {
+      const token = this.getToken();
+
+      if (token) {
+        const decodedToken: any = jwtDecode(token);
+        if (decodedToken && decodedToken.role) {
+          return Array.isArray(decodedToken.role) ? decodedToken.role : [decodedToken.role];
+        }
+      }
+
+      return null; 
+    }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { NgbTypeaheadWindow } from "@ng-bootstrap/ng-bootstrap/typeahead/typeahead-window";
+import { NgxPermissionsService } from 'ngx-permissions'
 import { NotificacaoService } from "src/app/_services/notificacao/notificacao.service";
 import { PermissionService } from "src/app/_services/permission/permission.service";
 import { RoleService } from "src/app/_services/role/role.service";
@@ -15,7 +16,7 @@ import { TokenStorageService } from "src/app/_services/auth/token-storage.servic
 export class ListRoleComponent implements OnInit {
   roles: any;
   user;
-  roleForDesableAdminButton
+  correntUserRoles
   showAddRole: boolean = false;
   numeroPermissions: number;
   page = 1;
@@ -44,14 +45,14 @@ export class ListRoleComponent implements OnInit {
       //this.isLoggedIn = this.authGuardService.canActivate();
       
       this.userService.getUserByEmail(this.user).subscribe((res) => {
-        this.roleForDesableAdminButton = res.user.roles;        
+        this.correntUserRoles = res.user.roles;        
       });
     });
 
     this.getPermissions();
   }
   desabledButtonForAdmin(adminRole: any): boolean {    
-    return this.isAdmin(this.roleForDesableAdminButton) && adminRole === 'Admin'
+    return this.isAdmin(this.correntUserRoles) && adminRole.toLowerCase() === 'admin'
   }
 
   isAdmin(roles: any): boolean {
@@ -62,13 +63,17 @@ export class ListRoleComponent implements OnInit {
     this.showAddRole = !this.showAddRole;
   }
 
-  public openConfirmationDialog(id, i) {
+  public openConfirmationDialog(id) {
     this.confirmationDialogService
       .confirm("Por favor confirma..", "Você realmente quer apagar... ?")
       .then((confirmed) => {
         if (confirmed) {
           this.removeRole(id);
-          this.roles.splice(i, 1);
+          const index = this.roles.findIndex(role => role.id === id);
+
+          if (index !== -1) {
+            this.roles.splice(index, 1); // Remove o elemento correto
+          }
         } else {
           console.log("not confirmed");
         }
@@ -92,7 +97,7 @@ export class ListRoleComponent implements OnInit {
         this.ToasterError(err, "Error", "");
       }
     );
-    console.log(`role id ${id}`);
+    
   }
 
   getPermissions() {

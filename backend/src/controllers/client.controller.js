@@ -3,255 +3,281 @@ const Image = require('../models/Image')
 const helper = require('../helper/helper')
 const constants = require('../config/constants.config')
 const moment = require('moment')
+const { checkPermission, isAdminOrSuperadmin } = require('../helper/authHelper');
+
 
 module.exports = {
+    
     async index(req, res) {
-        const client = await Client.findAll({
-            include: [
-                {
-                    association: 'image',
-                    attributes: ['path'],
-                },
-            ],
-        })
-        return res.json({ client })
-    },
-    show(req, res) {
-        const client = Client.findOne({
-            where: {
-                cardCode: req.body.cardCode,
-            },
-            include: [
-                {
-                    association: 'image',
-                    attributes: ['path'],
-                },
-                {
-                    association: 'access',
-                },
-            ],
-        })
-            .then((client) => {
-                if (client) {
-                    if (client.image) {
-                        client.image.path = `${constants.URL_IMAGE}/api/uploads/${client.image.path}`
-                    }
-                    return res.json({ client })
-                } else {
-                    return res.json({ message: 'Client not found' })
-                }
+        if (await checkPermission(req, 'READ_CLIENT') || await isAdminOrSuperadmin(req)) {
+            const client = await Client.findAll({
+                include: [
+                    {
+                        association: 'image',
+                        attributes: ['path'],
+                    },
+                ],
             })
-            .catch((err) => {
-                return res.json(err).message
-            })
-    },
-    showById(req, res) {
-        const client = Client.findOne({
-            where: {
-                id: req.params.id,
-            },
-            include: [
-                {
-                    association: 'image',
-                    attributes: ['path'],
-                },
-                {
-                    association: 'access',
-                },
-            ],
-        })
-            .then((client) => {
-                if (client) {
-                    if (client.image) {
-                        client.image.path = `${constants.URL_IMAGE}/api/uploads/${client.image.path}`
-                    }
-                    return res.json({ client })
-                } else {
-                    return res.json({ message: 'Client not found' })
-                }
-            })
-            .catch((err) => {
-                return res.json(err).message
-            })
-    },
-    store(req, res) {
-        //console.log(req.body)
-        let data
-        const {
-            fullName,
-            phone,
-            email,
-            cardCode,
-            genre,
-            address,
-            birthday,
-            ative,
-            monthlyPaymentDate,
-        } = req.body
-
-        if (req.file) {
-            data = {
-                fullName,
-                phone,
-                email,
-                cardCode,
-                genre,
-                address,
-                birthday,
-                ative: true,
-                monthlyPaymentDate: new Date(),
-                image: {
-                    path: req.file.filename,
-                },
-            }
-        } else {
-            data = {
-                fullName,
-                phone,
-                email,
-                cardCode,
-                genre,
-                address,
-                birthday,
-                ative: true,
-                monthlyPaymentDate: new Date(),
-            }
+            return res.json({ client })
+        }else{
+            return res.status(403).send({ message: 'Sem permissão para listar clientes.' });
         }
-        const client = Client.findOne({
-            where: {
-                cardCode: cardCode,
-            },
-        })
-            .then((client) => {
-                console.log(client)
-                if (client) {
-                    res.status(400).send({
-                        message: 'Failed! Client already created!',
-                    })
-                } else {
-                    Client.create(data, {
-                        include: [
-                            {
-                                association: 'image',
-                            },
-                        ],
-                    })
-                        .then((client) => {
-                            res.status(200).send({
-                                message:
-                                    'Success! Client registered successfully!',
-                            })
-                        })
-                        .catch((err) => {
-                            return res.status(422).json(err.message)
-                        })
+    },
+    async show(req, res) {
+        if (await checkPermission(req, 'READ_CLIENT') || await isAdminOrSuperadmin(req)) {
+            const client = Client.findOne({
+                where: {
+                    cardCode: req.body.cardCode,
+                },
+                include: [
+                    {
+                        association: 'image',
+                        attributes: ['path'],
+                    },
+                    {
+                        association: 'access',
+                    },
+                ],
+            })
+                .then((client) => {
+                    if (client) {
+                        if (client.image) {
+                            client.image.path = `${constants.URL_IMAGE}/api/uploads/${client.image.path}`
+                        }
+                        return res.json({ client })
+                    } else {
+                        return res.json({ message: 'Client not found' })
+                    }
+                })
+                .catch((err) => {
+                    return res.json(err).message
+                })
+        }else{
+            return res.status(403).send({ message: 'Sem permissão para listar cliente.' });
+        }
+    },
+    async showById(req, res) {
+        if (await checkPermission(req, 'READ_CLIENT') || await isAdminOrSuperadmin(req)) {
+            const client = Client.findOne({
+                where: {
+                    id: req.params.id,
+                },
+                include: [
+                    {
+                        association: 'image',
+                        attributes: ['path'],
+                    },
+                    {
+                        association: 'access',
+                    },
+                ],
+            })
+                .then((client) => {
+                    if (client) {
+                        if (client.image) {
+                            client.image.path = `${constants.URL_IMAGE}/api/uploads/${client.image.path}`
+                        }
+                        return res.json({ client })
+                    } else {
+                        return res.json({ message: 'Cliente não encontrado.' })
+                    }
+                })
+                .catch((err) => {
+                    return res.json(err).message
+                })
+        }else{
+            return res.status(403).send({ message: 'Sem permissão para listar cliente.' });
+        }
+    },
+    async store(req, res) {
+        if (await checkPermission(req, 'CREATE_CLIENT') || await isAdminOrSuperadmin(req)) {
+            let data
+            const {
+                fullName,
+                phone,
+                email,
+                cardCode,
+                genre,
+                address,
+                birthday,
+                ative,
+                monthlyPaymentDate,
+            } = req.body
+
+            if (req.file) {
+                data = {
+                    fullName,
+                    phone,
+                    email,
+                    cardCode,
+                    genre,
+                    address,
+                    birthday,
+                    ative: true,
+                    monthlyPaymentDate: new Date(),
+                    image: {
+                        path: req.file.filename,
+                    },
                 }
+            } else {
+                data = {
+                    fullName,
+                    phone,
+                    email,
+                    cardCode,
+                    genre,
+                    address,
+                    birthday,
+                    ative: true,
+                    monthlyPaymentDate: new Date(),
+                }
+            }
+            const client = Client.findOne({
+                where: {
+                    cardCode: cardCode,
+                },
             })
-            .catch((err) => {
-                return res.status(422).json(err.message)
-            })
+                .then((client) => {
+                    console.log(client)
+                    if (client) {
+                        res.status(400).send({
+                            message: 'Falha! Cliente já existe!',
+                        })
+                    } else {
+                        Client.create(data, {
+                            include: [
+                                {
+                                    association: 'image',
+                                },
+                            ],
+                        })
+                            .then((client) => {
+                                res.status(200).send({
+                                    message:
+                                        'Cliente registado com sucesso!',
+                                })
+                            })
+                            .catch((err) => {
+                                return res.status(422).json(err.message)
+                            })
+                    }
+                })
+                .catch((err) => {
+                    return res.status(422).json(err.message)
+                })
+        }else{
+            return res.status(403).send({ message: 'Sem permissão para criar cliente.' });
+        }
     },
     async update(req, res) {
-        const {
-            fullName,
-            phone,
-            email,
-            address,
-            birthday,
-            ative,
-            monthlyPaymentDate,
-        } = req.body
+        if (await checkPermission(req, 'UPDATE_ROLE') || await isAdminOrSuperadmin(req)) {
+            const {
+                fullName,
+                phone,
+                email,
+                address,
+                birthday,
+                ative,
+                monthlyPaymentDate,
+            } = req.body
 
-        const data = {
-            fullName,
-            phone,
-            email,
-            address,
-            birthday,
-            ative,
-            monthlyPaymentDate,
+            const data = {
+                fullName,
+                phone,
+                email,
+                address,
+                birthday,
+                ative,
+                monthlyPaymentDate,
+            }
+
+            const client = await Client.update(data, {
+                where: {
+                    id: req.params.id,
+                },
+            })
+                .then((client) => {
+                    if (req.file) {
+                        const image = Image.findOne({
+                            where: {
+                                client_id: req.params.id,
+                            },
+                        })
+                            .then((image) => {
+                                if (image) {
+                                    const image = Image.update(
+                                        {
+                                            path: req.file.filename,
+                                        },
+                                        {
+                                            where: {
+                                                client_id: req.params.id,
+                                            },
+                                        }
+                                    )
+                                } else {
+                                    const image = Image.create(
+                                        {
+                                            path: req.file.filename,
+                                            client_id: req.params.id,
+                                        },
+                                        {
+                                            where: {
+                                                client_id: req.params.id,
+                                            },
+                                        }
+                                    )
+                                }
+                                console.log(image)
+                                //return res.json({ client, image })
+                            })
+                            .catch(function (err) {
+                                return res.json(err)
+                            })
+                    }
+                    if (client == 0) {
+                        return res.json({
+                            message: 'Falha, cliente não atualizada',
+                        })
+                    } else {
+                        return res.json({
+                            message: 'Cliente atualizado com  sucesso.',
+                        })
+                    }
+                })
+                .catch(function (err) {
+                    return res.json(err).message
+                })
+        }else{
+            return res.status(403).send({ message: 'Sem permissão para atualizar cliente.' });
         }
-
-        const client = await Client.update(data, {
-            where: {
-                id: req.params.id,
-            },
-        })
-            .then((client) => {
-                if (req.file) {
-                    const image = Image.findOne({
-                        where: {
-                            client_id: req.params.id,
-                        },
-                    })
-                        .then((image) => {
-                            if (image) {
-                                const image = Image.update(
-                                    {
-                                        path: req.file.filename,
-                                    },
-                                    {
-                                        where: {
-                                            client_id: req.params.id,
-                                        },
-                                    }
-                                )
-                            } else {
-                                const image = Image.create(
-                                    {
-                                        path: req.file.filename,
-                                        client_id: req.params.id,
-                                    },
-                                    {
-                                        where: {
-                                            client_id: req.params.id,
-                                        },
-                                    }
-                                )
-                            }
-                            console.log(image)
-                            //return res.json({ client, image })
-                        })
-                        .catch(function (err) {
-                            return res.json(err)
-                        })
-                }
-                if (client == 0) {
-                    return res.json({
-                        message: 'Client not updated',
-                    })
-                } else {
-                    return res.json({
-                        message: 'Client updated successfully',
-                    })
-                }
-            })
-            .catch(function (err) {
-                return res.json(err).message
-            })
     },
     async remove(req, res) {
-        await Client.destroy({
-            where: {
-                id: req.params.id,
-            },
-        })
-            .then((client) => {
-                if (client == 0) {
-                    return res.status(400).json({
-                        message: 'Client not deleted!',
-                    })
-                } else {
-                    return res.json({
-                        message: 'Client deleted successfully!',
-                    })
-                }
+        if (await checkPermission(req, 'DELETE_ROLE') || await isAdminOrSuperadmin(req)) {
+            await Client.destroy({
+                where: {
+                    id: req.params.id,
+                },
             })
-            .catch((err) =>
-                res.json({
-                    message: err.message,
+                .then((client) => {
+                    if (client == 0) {
+                        return res.status(400).json({
+                            message: 'Falha, cliente não removido!',
+                        })
+                    } else {
+                        return res.json({
+                            message: 'Cliente removido com  sucesso.',
+                        })
+                    }
                 })
-            )
+                .catch((err) =>
+                    res.json({
+                        message: err.message,
+                    })
+                )
+        }else{
+            return res.status(403).send({ message: 'Sem permissão para remover cliente.' });
+        }
     },
 
     async inspiredMonthlyFee(req, res) {

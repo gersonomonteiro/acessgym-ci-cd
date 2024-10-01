@@ -19,9 +19,13 @@ export class UserService {
         return this.http.put(API_URL + `/${id}`, user, id)
     }
 
-    updatePwd(data, id): Observable<any> {
-        return this.http.put(API_URL + `/updatepwd/${id}`, data, id)
+    updatePwd(data): Observable<any> {
+        return this.http.post(API_URL + `/updatepwd`, data)
     }
+    resetPwd(data, id): Observable<any> {
+        return this.http.put(API_URL + `/reset/${id}`, data, id)
+    }
+
 
     list(): Observable<any> {
         return this.http.get(API_URL)

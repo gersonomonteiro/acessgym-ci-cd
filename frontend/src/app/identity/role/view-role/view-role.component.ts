@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
+import { NgxPermissionsService } from 'ngx-permissions'
 import { NotificacaoService } from 'src/app/_services/notificacao/notificacao.service'
 import { PermissionService } from 'src/app/_services/permission/permission.service'
 import { RoleService } from 'src/app/_services/role/role.service'
@@ -173,7 +174,6 @@ export class ViewRoleComponent implements OnInit {
             (role) => {
                 console.log(role)
                 this.ToasterSuccess(role.message)
-                window.location.reload()
             },
             (err) => {
                 console.log(err)
@@ -183,15 +183,12 @@ export class ViewRoleComponent implements OnInit {
     }
     onSubmitRoleName(id): void {
         console.log(this.Form2.value)
-        this.log(id)
         this.roleService.update(this.Form2.value, id).subscribe(
             (role) => {
-                console.log(role)
                 this.ToasterSuccess(role.message)
                 this.cancel2()
             },
             (err) => {
-                console.log(err)
                 this.ToasterError(err, 'Error', '')
             }
         )
@@ -203,11 +200,9 @@ export class ViewRoleComponent implements OnInit {
             .roleUpdateUser(this.FormAddUserRole.value, id)
             .subscribe(
                 (role) => {
-                    console.log(role)
                     this.ToasterSuccess(role.message)
                 },
                 (err) => {
-                    console.log(err)
                     this.ToasterError(err, 'Error', '')
                 }
             )

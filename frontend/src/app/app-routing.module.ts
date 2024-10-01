@@ -46,7 +46,7 @@ const routes: Routes = [
         canActivate: [AuthGuardService, NgxPermissionsGuard],
         data: {
             permissions: {
-                only: 'CREATE_USER',
+                only: 'READ_ROLE',
                 //redirectTo: '/forbidden'
             },
         },
@@ -54,7 +54,13 @@ const routes: Routes = [
     {
         path: 'home/role',
         component: ViewRoleComponent,
-        canActivate: [AuthGuardService],
+        canActivate: [AuthGuardService, NgxPermissionsGuard],
+        data: {
+            permissions: {
+                only: ['UPDATE_ROLE', 'READ_ROLE'],
+                //redirectTo: '/forbidden'
+            },
+        },
     },
     {
         path: 'home/clients',

@@ -51,6 +51,7 @@ import { BarComponent } from './home/charts/bar/bar.component';
 import { PolarComponent } from './home/charts/polar/polar.component';
 import { ReciboComponent } from './mensalidade/recibo/recibo.component';
 import { AddReciboComponent } from './mensalidade/add-recibo/add-recibo.component';
+import { ResetPasswordComponent } from './identity/user/reset-password/reset-password.component';
 const config: SocketIoConfig = { url: 'https://backend.acessgym.cv', options: {} }
 
 @NgModule({
@@ -83,6 +84,7 @@ const config: SocketIoConfig = { url: 'https://backend.acessgym.cv', options: {}
         PolarComponent,
         ReciboComponent,
         AddReciboComponent,
+        ResetPasswordComponent,
         
     ],
     imports: [
@@ -119,6 +121,7 @@ const config: SocketIoConfig = { url: 'https://backend.acessgym.cv', options: {}
         AcessControlComponent,
         EditClientComponent,
         AddReciboComponent,
+        ResetPasswordComponent,
     ],
 })
 export class AppModule {}

@@ -21,7 +21,7 @@
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
+          <div class="col-sm-6"  *ngxPermissionsOnly="['CREATE_ROLE']">
             <button type="button" class="btn btn-success" *ngIf="!showAddRole" (click)="onClickMe()"><i
                 class="mdi mdi-plus-outline mdi-18px"></i> Adicionar
                 função</button>
@@ -87,9 +87,9 @@
                 </thead>
                 <tbody>
                   <tr
-                    *ngFor="let role of roles  | filter:searchText | slice: (page-1) * pageSize : page * pageSize; let i = index">
+                    *ngFor="let role of roles  | filter:searchText | slice: (page-1) * pageSize : page * pageSize; let index = index">
                     <td>
-                      {{ (page -1) * pageSize + i + 1 }}
+                      {{ (page -1) * pageSize + index + 1 }}
                     </td>
                     <td>
                       <a>
@@ -108,10 +108,10 @@
                         style="margin-right: 5px;">{{role.permission[i]?.name}}</span>
                     </td>
                     <td>
-                      <a class="edit" title="Edit" data-toggle="tooltip" [routerLink]="['/home/role']"
+                      <a class="edit" title="View | Edit" data-toggle="tooltip" [routerLink]="['/home/role']" *ngxPermissionsOnly="['READ_ROLE','UPDATE_ROLE']"
                         [queryParams]="{idRole:role.id}" [ngClass]="{ 'disabled': isDisabled(role.name),  'desabledAdmin': desabledButtonForAdmin(role.name)}"><i class="material-icons">&#xE254;</i></a>
-                      <a class="delete" title="Delete" data-toggle="tooltip"
-                        (click)="openConfirmationDialog(role.id, i)" [ngClass]="{ 'disabled': isDisabled(role.name),  'desabledAdmin': desabledButtonForAdmin(role.name)}"><i class="material-icons">&#xE872;</i></a>
+                      <a class="delete" title="Delete" data-toggle="tooltip" *ngxPermissionsOnly="['DELETE_ROLE']"
+                        (click)="openConfirmationDialog(role.id)" [ngClass]="{ 'disabled': isDisabled(role.name),  'desabledAdmin': desabledButtonForAdmin(role.name)}"><i class="material-icons">&#xE872;</i></a>
                     </td>
 
                 </tbody>

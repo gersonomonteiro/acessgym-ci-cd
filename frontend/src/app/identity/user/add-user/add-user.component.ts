@@ -80,13 +80,14 @@ export class AddUserComponent implements OnInit {
         let roles = res.user.roles;
         
         if (this.isAdmin(roles)) {
-          this.roles = this.roles.filter((role) => role.name != "Admin");
+          this.roles = this.roles.filter((role) => role.name.toLowerCase() != "admin");
           
         }
       });
     });
   }
   isAdmin(roles: any): boolean {
+    console.log(roles)
     return roles.some((role: any) => role.name != "superadmin");
   }
 

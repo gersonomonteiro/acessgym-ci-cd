@@ -154,8 +154,9 @@ export class ProfileComponent implements OnInit {
     toggleFieldTextType() {
         this.fieldTextType = !this.fieldTextType
     }
-    updatePwd(id) {
-        this.userService.updatePwd(this.formChangePwd.value, id).subscribe(
+    updatePwd() {
+        console.log(this.formChangePwd.value)
+        this.userService.updatePwd(this.formChangePwd.value).subscribe(
             (res) => {
                 this.formChangePwd.reset()
                 this.ToasterSuccess(res.message)

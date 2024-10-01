@@ -25,11 +25,12 @@ router.put(
     upload.single('image'),
     userController.update
 )
-router.put(
-    '/user/updatepwd/:id',
+router.post(
+    '/user/updatepwd',
     [authJwt.verifyToken],
     userController.updatePassword
 )
+router.put('/user/reset/:id', [authJwt.verifyToken], userController.resetPassword)
 router.delete('/user/:id', [authJwt.verifyToken], userController.remove)
 
 module.exports = router

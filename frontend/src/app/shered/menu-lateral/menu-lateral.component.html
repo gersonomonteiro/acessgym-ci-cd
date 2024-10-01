@@ -33,17 +33,17 @@
             </p>
           </a>
         </li>
-        <div *ngxPermissionsOnly="['CREATE_USER','READ_USER','UPDATE_USER','DELETE_USER']">
+        <div *ngxPermissionsOnly="['READ_USER','READ_ROLE']">
 
           <li class="nav-header" style="margin-left: 11px;">IDENTITY</li>
           
-              <li class="nav-item">
+              <li class="nav-item" *ngxPermissionsOnly="['READ_USER']">
                 <a [routerLink]="['home/users']" class="nav-link">
                   <i class="right fa fa-users"></i>
                   <p style="margin-left: 9px;">Users</p>
                 </a>
               </li>
-              <li class="nav-item" *ngxPermissionsOnly="['READ_USER']">
+              <li class="nav-item" *ngxPermissionsOnly="['READ_ROLE']">
                 <a [routerLink]="['home/roles']" class="nav-link">
                   <i class="right fa fa-cog"></i>
                   <p style="margin-left: 9px;">Roles</p>

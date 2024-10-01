@@ -63,8 +63,8 @@ export class LoginComponent implements OnInit {
             (err) => {
                 this.loading = false
                 this.loginFailed = true
-                const errorMessage = this.errorHandler.getErrorMessage(err);
-                this.ToasterError(errorMessage, '', {
+                //const errorMessage = this.errorHandler.getErrorMessage(err);
+                this.ToasterError(err, '', {
                     timeOut: 30000,
                 })              
 

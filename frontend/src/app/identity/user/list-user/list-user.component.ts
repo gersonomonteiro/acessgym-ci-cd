@@ -52,6 +52,7 @@ export class ListUserComponent implements OnInit {
   rolesTemp;
   avatarBaseUrl: string = `${constants.BASE_API_URL}/uploads/`;
   avatarApiUrl: string = "https://ui-avatars.com/api/?background=random&name=";
+  role: string[] | null = null;
 
   page = 1;
   pageSize = 5;
@@ -89,6 +90,16 @@ export class ListUserComponent implements OnInit {
     return id === 1 && this.myEmail != email;
   }
 
+  desabledResetButtonForOtherUser(){
+    this.role = this.tokenStorage.getUserRolesFromToken();
+    console.log(this.role)
+    if (this.role && (this.role.includes('admin') || this.role.includes('superadmin'))) {
+      return  false;
+    } else {
+      return  true;
+    }    
+  }
+
   onClickMe() {
     this.showAddUser = !this.showAddUser;
   }
@@ -99,13 +110,17 @@ export class ListUserComponent implements OnInit {
     });
   }
 
-  public openConfirmationDialog(id, index) {
+  public openConfirmationDialog(id) {
     this.confirmationDialogService
       .confirm("Por favor confirma..", "Você realmente quer apagar... ?")
       .then((confirmed) => {
         if (confirmed) {
           this.removeUser(id);
-          this.users.splice(index, 1);
+          const index = this.users.findIndex(user => user.id === id);
+
+          if (index !== -1) {
+            this.users.splice(index, 1); // Remove o elemento correto
+          }
         } else {
           console.log("not confirmed");
         }
@@ -117,10 +132,13 @@ export class ListUserComponent implements OnInit {
       );
   }
 
+  openResetPasswordDialog(id) {    
+        this.confirmationDialogService.resetUserPasswordDialog(id)    
+  }
+
   removeUser(id) {
     this.userService.remove(id).subscribe(
       (role) => {
-        console.log(role);
         this.ToasterSuccess(role.message);
         //window.location.reload()
       },
@@ -129,7 +147,6 @@ export class ListUserComponent implements OnInit {
         this.ToasterError(err, "Error", "");
       }
     );
-    console.log(`role id ${id}`);
   }
 
   ToasterSuccess(message) {
