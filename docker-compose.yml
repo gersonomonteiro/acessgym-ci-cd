@@ -39,6 +39,7 @@ services:
       - ./mysql/scripts:/docker-entrypoint-initdb.d
       #- ./mysql/conf/my.cnf:/etc/mysql/my.cnf
       - mysql-data-test:/var/lib/mysql
+      #teste ci/cd jenkins
   frontend:
     build: ./frontend
     container_name: frontend-accessgym
