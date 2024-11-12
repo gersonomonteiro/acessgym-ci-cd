@@ -170,13 +170,15 @@ module.exports = {
         }
     },
     async update(req, res) {
-        if (await checkPermission(req, 'UPDATE_ROLE') || await isAdminOrSuperadmin(req)) {
+        if (await checkPermission(req, 'UPDATE_CLIENT') || await isAdminOrSuperadmin(req)) {
             const {
                 fullName,
                 phone,
                 email,
                 address,
                 birthday,
+                genre,
+                cardCode,
                 ative,
                 monthlyPaymentDate,
             } = req.body
@@ -187,6 +189,8 @@ module.exports = {
                 email,
                 address,
                 birthday,
+                genre,
+                cardCode,
                 ative,
                 monthlyPaymentDate,
             }
@@ -253,7 +257,7 @@ module.exports = {
         }
     },
     async remove(req, res) {
-        if (await checkPermission(req, 'DELETE_ROLE') || await isAdminOrSuperadmin(req)) {
+        if (await checkPermission(req, 'DELETE_CLIENT') || await isAdminOrSuperadmin(req)) {
             await Client.destroy({
                 where: {
                     id: req.params.id,

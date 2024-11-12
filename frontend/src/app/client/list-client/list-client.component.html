@@ -20,7 +20,7 @@
   <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
-        <div class="col-sm-6">
+        <div class="col-sm-6" *ngxPermissionsOnly="['CREATE_CLIENT']">
           <button type="button" class="btn btn-success" (click)="onClickMe()"><i
               class="mdi mdi-plus-outline mdi-18px"></i> Adicionar 
             cliente</button>
@@ -61,8 +61,11 @@
               <th style="width: 20%">
                 Nome
               </th>
-              <th style="width: 30%">
+              <th style="width: 20%">
                 Email
+              </th>
+              <th style="width: 10%">
+                Código cartão
               </th>
               <th>
                 Morada
@@ -97,12 +100,15 @@
                   {{client.fullName}}
                 </a>
                 <br />
-                <small>
-                  {{client.createdAt}}
+                <small style="margin-left: 7px; font-size: 10px">
+                  cliente desde: {{ client.createdAt | date:'dd MMMM yyyy' }}
                 </small>
               </td>
               <td>
                 {{client.email}}
+              </td>              
+              <td>
+                {{client.cardCode}}
               </td>
               <td>
                 {{client.address}}
@@ -110,19 +116,27 @@
               <td class="project-state" *ngIf="client.ative; else elseBlockStatus">
                 <span class="status text-success">&bull;</span>
                 Ativo
+                <br />
+                <small style="margin-left: 7px; font-size: 10px">
+                  última mensalidade: {{ client.monthlyPaymentDate | date:'dd MMMM yyyy' }}
+                </small>
               </td>
               <ng-template #elseBlockStatus>
                 <td class="project-state">
                   <span class="status text-danger">&bull;</span>
                   Inativo
+                  <br />
+                <small style="margin-left: 7px; font-size: 10px">
+                  última mensalidade: {{ client.monthlyPaymentDate | date:'dd MMMM yyyy' }}
+                </small>
                 </td>
               </ng-template>
               <td>
-                <a class="view" title="View" data-toggle="tooltip" [routerLink]="['/home/client']"
+                <a class="view" title="View" data-toggle="tooltip" [routerLink]="['/home/client']" *ngxPermissionsOnly="['READ_CLIENT']"
                   [queryParams]="{cardCode:client.cardCode}"><i class="material-icons">&#xE417;</i></a>
-                <a class="edit" title="Edit" data-toggle="tooltip" (click)="openEditDialog(client.id)"><i
+                <a class="edit" title="Edit" data-toggle="tooltip" *ngxPermissionsOnly="['UPDATE_CLIENT']" (click)="openEditDialog(client.id)"><i
                     class="material-icons">&#xE254;</i></a>
-                <a class="delete" title="Delete" data-toggle="tooltip"
+                <a class="delete" title="Delete" data-toggle="tooltip" *ngxPermissionsOnly="['DELETE_CLIENT']"
                   (click)="openConfirmationDialog(client.id, index)"><i class="material-icons">&#xE872;</i></a>
               </td>
             </tr>

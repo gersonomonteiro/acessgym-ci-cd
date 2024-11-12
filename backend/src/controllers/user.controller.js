@@ -32,7 +32,7 @@ module.exports = {
         }
     },
     async show(req, res) {
-        if (await checkPermission(req, 'READ_USER') ||  await isAdminOrSuperadmin(req)) { 
+        if (await checkPermission(req, 'READ_USER') || await checkPermission(req, 'UPDATE_USER') ||  await isAdminOrSuperadmin(req)) { 
             const user = await User.findOne({
                 where: {
                     email: req.body.email,
@@ -272,7 +272,7 @@ module.exports = {
             // Verifica se a senha antiga está correta
             const passwordIsValid = bcrypt.compareSync(oldPwd, user.password);
             if (!passwordIsValid) {
-                return res.status(401).send({
+                return res.status(400).send({
                     message: 'A senha antiga está incorreta.',
                 });
             }

@@ -20,6 +20,25 @@ services:
       - ./mysql/scripts:/docker-entrypoint-initdb.d
       #- ./mysql/conf/my.cnf:/etc/mysql/my.cnf
       - mysql-data:/var/lib/mysql
+  mysqlunitest:
+    image: mysql:5.7.31
+    container_name: mysql-accessgym-test
+    restart: unless-stopped
+    ports:
+      - 3308:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-uroot", "-pjmYFW28LuQmVXCo9tLB1"]
+      interval: 5s
+      timeout: 10s
+      retries: 2
+      start_period: 20s
+    environment:
+      MYSQL_ROOT_PASSWORD: jmYFW28LuQmVXCo9tLB1
+      MYSQL_DATABASE: acessgym
+    volumes:
+      - ./mysql/scripts:/docker-entrypoint-initdb.d
+      #- ./mysql/conf/my.cnf:/etc/mysql/my.cnf
+      - mysql-data-test:/var/lib/mysql
   frontend:
     build: ./frontend
     container_name: frontend-accessgym
@@ -64,3 +83,4 @@ volumes:
     backend_node_modules:
     backend_uploads:
     mysql-data:
+    mysql-data-test:

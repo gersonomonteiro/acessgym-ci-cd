@@ -17,7 +17,7 @@
   <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
-        <div class="col-sm-6">
+        <div class="col-sm-6" *ngxPermissionsOnly="['UPDATE_CLIENT']">
           <button type="button" class="btn btn-success" (click)="onClickAddRecibo()"><i
               class="mdi mdi-plus-outline mdi-18px"></i> Pagar mensalidade</button>
         </div>
@@ -145,7 +145,7 @@
                         <div class="row">
                           <div class="col-xs-6 margintop">
                             <a class="btn btn-primary" href="{{RECIBO_BASE_URL + recibo.fileName }}" role="button" class="btn btn-success" id="invoice-print" target="_blank"><i class="fa fa-print" ></i> Imprimir</a>  
-                            <a class="btn btn-primary" role="button" class="btn btn-danger" style="color: #fff; margin-left: 5px;"(click)="sendReciboByEmail(recibo.id)"><i class="fa fa-envelope"></i> Inviar por email</a>             
+                            <a class="btn btn-primary" role="button" class="btn btn-danger" style="color: #fff; margin-left: 5px;" [attr.title]="'Enviar para: ' + recibo.client.email" (click)="sendReciboByEmail(recibo.id)"><i class="fa fa-envelope"></i> Inviar por email</a>             
                           </div>
                         </div>
                       </div>

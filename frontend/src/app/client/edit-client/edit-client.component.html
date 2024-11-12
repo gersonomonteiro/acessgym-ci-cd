@@ -9,14 +9,14 @@
   </button>
 </div>
 <div class="modal-body">
-  <div class="row">
+  <!--div class="row">
     <div class="col-sm-12">
       <div class="form-group">
         <label>Cliente status</label>
         <app-switch size="small" [checked]="client.ative" (click)="updateClientStatus(client.id)"></app-switch>
       </div>
     </div>
-  </div>
+  </div-->
   <form role="form" [formGroup]="Form" (ngSubmit)="onSubmit(client.id)" novalidate>
     <div class="row">
 
@@ -33,7 +33,7 @@
           *ngIf="Form.controls['fullName'].invalid && (Form.controls['fullName'].dirty || Form.controls['fullName'].touched)"
           class="invalid-feedback-error">
           <div *ngIf="Form.controls['fullName'].errors.required">
-            Name is required.
+            Nome é obrigatório.
           </div>
           <div *ngIf="Form.controls['fullName'].errors.minlength">
             Name must be at least 3 characters long.
@@ -52,7 +52,7 @@
         <div *ngIf="Form.controls['email'].invalid && (Form.controls['email'].dirty || Form.controls['email'].touched)"
           class="invalid-feedback-error">
           <div *ngIf="Form.controls['email'].errors.required">
-            Email is required.
+            Email é obrigatório.
           </div>
         </div>
       </div>
@@ -79,9 +79,7 @@
               <span class="input-group-text"><i class="fas fa-home"></i></span>
             </div>
             <input type="text" class="form-control" formControlName="address" [(ngModel)]="client.address"
-              placeholder="Morada" [ngClass]="{
-                'is-invalid': Form.controls['address'].touched && Form.controls['address'].invalid
-              }">
+              placeholder="Morada">
           </div>
           <!-- /.input group -->
         </div>
@@ -98,17 +96,24 @@
           </div>
         </div>
       </div>
-      <!--div class="col-sm-3">
+      <div class="col-sm-3">
         <div class="form-group">
           <label>Codigo do cartão</label>
           <div class="input-group">
             <div class="input-group-prepend">
               <span class="input-group-text"><i class="far fa-id-card"></i></span>
             </div>
-            <input type="text" class="form-control" [ngModel]="cardCode" formControlName="cardCode">
+            <input type="text" class="form-control" [ngModel]="client.cardCode" formControlName="cardCode">
           </div>
         </div>
-      </div-->
+        <div
+          *ngIf="Form.controls['cardCode'].invalid && (Form.controls['cardCode'].dirty || Form.controls['cardCode'].touched)"
+          class="invalid-feedback-error">
+          <div *ngIf="Form.controls['cardCode'].errors.required">
+            Código cartão é obrigatório.
+          </div>          
+        </div>
+      </div>
     </div>
     <div class="row">
       <div class="col-sm-9">

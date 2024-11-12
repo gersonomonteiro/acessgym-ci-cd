@@ -51,7 +51,7 @@
           </li>
         </div>
         <li class="nav-header" style="margin-left: 4px;">GINÁSIO</li>
-        <li class="nav-item has-treeview">
+        <li class="nav-item has-treeview" *ngxPermissionsOnly="['READ_CLIENT']">
           <a [routerLink]="['home/clients']" class="nav-link">
             <i class="right fas fa-dumbbell"></i>
             <p style="margin-left: 6px;">

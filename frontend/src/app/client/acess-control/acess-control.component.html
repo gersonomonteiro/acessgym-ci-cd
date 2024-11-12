@@ -22,11 +22,18 @@
         <div class="modal-body">
 
           <div class="row">
-            <div class="card" style="width: 18rem;">
-              <img src="{{ client.image.path }}" class="card-img-top img-circle"width="300" height="300" *ngIf="client.image">
+            <div class="card" style="width: 18rem;" *ngIf="client.image; else elseBlock">
+              <img src="{{ client.image.path }}" class="card-img-top img-circle"width="300" height="300">
               <div class="card-body">
               </div>
             </div>
+            <ng-template #elseBlock>
+              <div class="card" style="width: 18rem;">
+                <img src="{{ avatarApiUrl }}{{ client.fullName }}" class="card-img-top img-circle"width="300" height="300">
+                <div class="card-body">
+                </div>
+              </div>
+            </ng-template>
             <div class="col-sm-6" style="margin-left: 10px;">
               <strong><h1>Nome: </h1></strong><h2>{{client.fullName}}</h2>
               <h2>Ultima mensalidade: </h2><h3>{{client.monthlyPaymentDate | date:'medium'}}</h3>

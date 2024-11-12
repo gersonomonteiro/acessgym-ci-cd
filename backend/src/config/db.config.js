@@ -3,7 +3,7 @@ module.exports = {
     password: 'jmYFW28LuQmVXCo9tLB1',
     database: 'acessgym',
     host: 'localhost',
-    port: '3307',
+    port: '3308',
     dialect: 'mysql',
     pool: {
         max: 5,

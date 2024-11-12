@@ -87,7 +87,7 @@ function gerarToken(parametro = {}, role = '') {
                                                     user,
                                                     roles,
                                                     message:
-                                                        'User created successfully',
+                                                        'Utilizador criado com sucesso.',
                                                 })
                                             })
                                         })
@@ -97,7 +97,7 @@ function gerarToken(parametro = {}, role = '') {
                                             res.send({
                                                 user,
                                                 roles,
-                                                message: 'User created successfully',
+                                                message: 'Utilizador criado com sucesso.',
                                             })
                                         })
                                     }

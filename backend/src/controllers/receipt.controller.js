@@ -2,6 +2,7 @@
 const Receipt = require('../models/Receipt')
 const Client = require('../models/Client')
 const { sendEmail, yearAndmonth } = require('../helper/helper')
+const { checkPermission, isAdminOrSuperadmin } = require('../helper/authHelper');
 const { Op } = require('sequelize')
 
 
@@ -45,135 +46,137 @@ module.exports = {
         return res.json({ receipt })
     },
 
-    store(req, res) {
-        const client = Client.findOne({
-            where: {
-                id: req.body.client_id,
-            },
-            attributes: ['fullName', 'email'],
-        })
-            .then((client) => {
-                const monthNames = {
-                    janeiro: 0, fevereiro: 1, marco: 2, abril: 3, maio: 4, junho: 5,
-                    julho: 6, agosto: 7, setembro: 8, outubro: 9, novembro: 10, dezembro: 11
-                };
-                let lastMonthPaid = monthNames[req.body.monthlyPayment[0].month];
-                let monthName
-                const listPrice = []
-                for (let i = 0; i < req.body.monthlyPayment.length; i++) {
-                    const item = req.body.monthlyPayment[i];
+    async store(req, res) {
+        if (await checkPermission(req, 'UPDATE_CLIENT') || await isAdminOrSuperadmin(req)) {
+            const client = Client.findOne({
+                where: {
+                    id: req.body.client_id,
+                },
+                attributes: ['fullName', 'email'],
+            })
+                .then((client) => {
+                    const monthNames = {
+                        janeiro: 0, fevereiro: 1, marco: 2, abril: 3, maio: 4, junho: 5,
+                        julho: 6, agosto: 7, setembro: 8, outubro: 9, novembro: 10, dezembro: 11
+                    };
+                    let lastMonthPaid = monthNames[req.body.monthlyPayment[0].month];
+                    let monthName
+                    const listPrice = []
+                    for (let i = 0; i < req.body.monthlyPayment.length; i++) {
+                        const item = req.body.monthlyPayment[i];
 
-                    if (item.price <= 0){
-                        return res.status(400).json({
-                            message: 'Valor invalido!',
-                        })
-                    }
-                    const priceAfterDiscount = item.price * (1 - item.discount / 100);
-                    listPrice.push(priceAfterDiscount)
-                    const currentMonth = monthNames[item.month];
-                    // Verifica se o mês atual está em sequência
-                    if (i > 0 && (currentMonth - lastMonthPaid !== 1)) {
-                        return res.status(400).json({
-                            message: 'Sequencia de mês invalida!',
-                        });
-                    }
+                        if (item.price <= 0){
+                            return res.status(400).json({
+                                message: 'Valor invalido!',
+                            })
+                        }
+                        const priceAfterDiscount = item.price * (1 - item.discount / 100);
+                        listPrice.push(priceAfterDiscount)
+                        const currentMonth = monthNames[item.month];
+                        // Verifica se o mês atual está em sequência
+                        if (i > 0 && (currentMonth - lastMonthPaid !== 1)) {
+                            return res.status(400).json({
+                                message: 'Sequencia de mês invalida!',
+                            });
+                        }
 
-                        lastMonthPaid = currentMonth;
-                        monthName = item.month
-                        console.log(lastMonthPaid)
-                }
-                
-                
-                const totalPayment = listPrice.reduce((x, y) => x + y, 0);
-
-                const clientName = client.fullName
-                const timestamp = Date.now()
-                const fileName =
-                    clientName.replace(/\s+/g, '_') + '_' + timestamp + '.pdf'
-                const createReceipt = Receipt.create(
-                    {
-                        client_id: req.body.client_id,
-                        receiptNumber: timestamp,
-                        totalPayment: totalPayment,
-                        fileName: fileName,
-                        monthlyPayment: req.body.monthlyPayment,
-                    },
-                    {
-                        include: [
-                            {
-                                association: 'monthlyPayment',
-                            },
-                        ],
+                            lastMonthPaid = currentMonth;
+                            monthName = item.month                        
                     }
-                )
-                    .then((createReceipt) => {
-                        const currentYear = new Date().getFullYear();
-                        const currentDay = new Date().getDate();
-                        const lastPaymentDate = new Date(currentYear, monthNames[monthName], currentDay);
-                        Client.update({ monthlyPaymentDate: lastPaymentDate, ative: 1 }, {
-                                where: { id: req.body.client_id },
-                        }).then(() => {
-                            const receipt = {
-                                receiptNumber: timestamp,
-                                createdAt: createReceipt.createdAt.toDateString(),
-                                clientName: clientName,
-                                totalPayment: totalPayment,
-                                monthlyPayment: req.body.monthlyPayment,
-                             }
-                            ejs.renderFile(
-                                path.join(__dirname, '../views/', 'template.ejs'),
+                    
+                    
+                    const totalPayment = listPrice.reduce((x, y) => x + y, 0);
+
+                    const clientName = client.fullName
+                    const timestamp = Date.now()
+                    const fileName = clientName.replace(/\s+/g, '_') + '_' + timestamp + '.pdf'
+                    const createReceipt = Receipt.create(
+                        {
+                            client_id: req.body.client_id,
+                            receiptNumber: timestamp,
+                            totalPayment: totalPayment,
+                            fileName: fileName,
+                            monthlyPayment: req.body.monthlyPayment,
+                        },
+                        {
+                            include: [
                                 {
-                                    receipt: receipt,
+                                    association: 'monthlyPayment',
                                 },
-                                (err, data) => {
-                                    if (err) {
-                                        res.send(err)
-                                    } else {
-                                        let options = {
-                                            height: '17.25in',
-                                            width: '13.5in',
-                                            header: {
-                                                height: '30mm',
-                                            },
-                                            footer: {
-                                                height: '30mm',
-                                            },
-                                            format: 'Letter',
-                                            phantomPath: '/usr/src/app/node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs'
-                                        }
-                                        
-                                        pdf.create(data, options).toFile(
-                                            `uploads/${fileName}`,
-                                            function (err, data) {
-                                                if (err) {
-                                                    //res.send(err)
-                                                    console.log(err)
-                                                } else {
-                                                    res.send({
-                                                        message:
-                                                            'Recibo criado com sucesso!',
-                                                    })
-                                                }
-                                            }
-                                        )
-                                    }
+                            ],
+                        }
+                    )
+                        .then((createReceipt) => {
+                            const currentYear = new Date().getFullYear();
+                            const currentDay = new Date().getDate();
+                            const lastPaymentDate = new Date(currentYear, monthNames[monthName], currentDay);
+                            Client.update({ monthlyPaymentDate: lastPaymentDate, ative: 1 }, {
+                                    where: { id: req.body.client_id },
+                            }).then(() => {
+                                const receipt = {
+                                    receiptNumber: timestamp,
+                                    createdAt: createReceipt.createdAt.toDateString(),
+                                    clientName: clientName,
+                                    totalPayment: totalPayment,
+                                    monthlyPayment: req.body.monthlyPayment,
                                 }
-                            )
+                                ejs.renderFile(
+                                    path.join(__dirname, '../views/', 'template.ejs'),
+                                    {
+                                        receipt: receipt,
+                                    },
+                                    (err, data) => {
+                                        if (err) {
+                                            res.send(err)
+                                        } else {
+                                            let options = {
+                                                height: '17.25in',
+                                                width: '13.5in',
+                                                header: {
+                                                    height: '30mm',
+                                                },
+                                                footer: {
+                                                    height: '30mm',
+                                                },
+                                                format: 'Letter',
+                                                phantomPath: '/usr/src/app/node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs'
+                                            }
+                                            
+                                            pdf.create(data, options).toFile(
+                                                `uploads/${fileName}`,
+                                                function (err, data) {
+                                                    if (err) {
+                                                        //res.send(err)
+                                                        console.log(err)
+                                                    } else {
+                                                        res.send({
+                                                            message:
+                                                                'Recibo criado com sucesso!',
+                                                        })
+                                                    }
+                                                }
+                                            )
+                                        }
+                                    }
+                                )
+                            })
+                            })
+                        .catch((err) => {
+                            return res.status(422).json({
+                                message: 'Falha em criar recibo!',
+                                error: err.message,
+                            })
                         })
-                        })
-                    .catch((err) => {
-                        return res.status(422).json({
-                            message: 'Falha em criar recibo!',
-                            error: err.message,
-                        })
-                    })
-            })
-            .catch((err) => {
-                return res.status(422).json({
-                    message: 'Falha em criar recibo!',
-                    error: err.message,
                 })
-            })
+                .catch((err) => {
+                    return res.status(422).json({
+                        message: 'Falha em criar recibo!',
+                        error: err.message,
+                    })
+                })
+        }else{
+            return res.status(403).send({ message: 'Sem permissão para pagar mensalidade.' });
+        }
     },
     async remove(req, res) {
         await Receipt.destroy({
@@ -184,11 +187,11 @@ module.exports = {
             .then((receipt) => {
                 if (receipt == 0) {
                     return res.status(400).json({
-                        message: 'Receipt not deleted!',
+                        message: 'Recibo não removido!',
                     })
                 } else {
                     return res.json({
-                        message: 'Receipt deleted successfully!',
+                        message: 'Recibo removido com sucesso!',
                     })
                 }
             })

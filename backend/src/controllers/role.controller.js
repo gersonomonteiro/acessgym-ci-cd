@@ -279,11 +279,11 @@ module.exports = {
             .then((role) => {
                 if (role == 0) {
                     return res.status(400).json({
-                        message: 'Role not deleted!',
+                        message: 'Role não sucesso!',
                     })
                 } else {
                     return res.json({
-                        message: 'Role deleted successfully!',
+                        message: 'Role eliminado com sucesso!',
                     })
                 }
             })

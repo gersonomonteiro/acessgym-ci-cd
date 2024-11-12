@@ -45,12 +45,10 @@ async function checkPermission(req, permissionRequired) {
     for (const role of user.roles) {
       const permissions = role.permission.map((p) => p.name);
       if (permissions.includes(permissionRequired)) {
-        console.log("tem read role");
-        return true;
+         return true;
       }
     }
-    console.log("ca tem read role");
-
+ 
     return false;
   } catch (error) {
     console.error("Erro ao verificar permissão:", error);
@@ -58,7 +56,22 @@ async function checkPermission(req, permissionRequired) {
   }
 }
 
+// Função para extrair o ID do utilizador do token JWT
+function extractUserIdFromToken(req){
+  const token = req.headers["x-access-token"];
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, authConfig.secret);
+      return decoded ? decoded.parametro.id || 'unknown' : 'unknown'; // Assumindo que o ID do utilizador está no campo 'userId'
+    } catch (err) {
+      return 'invalid_token'; // Caso o token seja inválido
+    }
+  }
+  return 'no_token'; // Caso não exista o cabeçalho de autorização
+};
+
 module.exports = {
   isAdminOrSuperadmin,
   checkPermission,
+  extractUserIdFromToken,
 };

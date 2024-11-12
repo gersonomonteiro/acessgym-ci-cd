@@ -33,11 +33,11 @@ export class EditClientComponent implements OnInit {
     ) {
         this.Form = this.formBuilder.group({
             fullName: ['', Validators.required],
-            phone: ['', Validators.required],
-            email: [''],
-            address: ['', Validators.required],
-            birthday: [moment().toDate(), Validators.required],
-            //cardCode: [this.cardCode, Validators.required],
+            phone: [''],
+            email: ['', Validators.required],
+            address: [''],
+            birthday: [moment().toDate()],
+            cardCode: ['', Validators.required],
             img: [null],
         })
     }
@@ -107,7 +107,7 @@ export class EditClientComponent implements OnInit {
         //formData.append('genre', this.Form.get('genre').value)
         formData.append('address', this.Form.get('address').value)
         formData.append('birthday', this.Form.get('birthday').value)
-        //formData.append('cardCode', this.Form.get('cardCode').value)
+        formData.append('cardCode', this.Form.get('cardCode').value)
         formData.append('image', this.Form.get('img').value)
 
         this.clientService.update(formData, id).subscribe(

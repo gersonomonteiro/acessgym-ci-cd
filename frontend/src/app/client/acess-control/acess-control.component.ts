@@ -10,6 +10,8 @@ import { AccessService } from 'src/app/_services/access/access.service'
 export class AcessControlComponent implements OnInit {
     @Input() client: any
     dataSuccess: {}
+    avatarApiUrl: string = 'https://ui-avatars.com/api/?background=random&name='
+
     constructor(
         private activeModal: NgbActiveModal,
         private accessService: AccessService

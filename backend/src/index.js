@@ -8,9 +8,13 @@ const ioClient = require("socket.io-client");
 const morgan = require('morgan');
 
 app = express();
+
+// Criar token personalizado para Morgan
+morgan.token('user-id', (req) => extractUserIdFromToken(req));
 const logFileName = `${new Date().getDate().toString().padStart(2, '0')}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getFullYear()}-access.log`;
 const accessLogStream = fs.createWriteStream(path.join(__dirname, '/log', logFileName), { flags: 'a' })
-app.use(morgan('combined', { stream: accessLogStream }))
+const customFormat = `:remote-addr - [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent - :user-id "`;
+app.use(morgan(customFormat, { stream: accessLogStream }))
 
 const http = require("http");
 const server = http.Server(app);
@@ -24,6 +28,8 @@ const permissionRouter = require("./routes/permission.routes");
 const accessRouter = require("./routes/access.routes");
 const receiptRouter = require("./routes/receipt.routes");
 const helper = require("./helper/helper");
+const { extractUserIdFromToken} = require('./helper/authHelper');
+
 const constants = require("./config/constants.config");
 const { authJwt } = require("./middleware");
 
@@ -52,29 +58,7 @@ app.use("/api", clientRouter);
 app.use("/api/uploads", express.static(path.join(__dirname, "..", "/uploads")));
 app.use("/api", accessRouter);
 app.use("/api", receiptRouter);
-/*
-const mySerial = new SerialPort("COM3", {
-  baudRate: 9600,
-});
 
-const parser = mySerial.pipe(new Readline());
-
-mySerial.on("open", function () {
-  console.log("Opened Port.");
-});
-mySerial.on("err", function (data) {
-  console.log(err.message);
-});
-
-parser.on("data", function (data) {
-  console.log(data);
-  if (data !== "0" && data !== "1") {
-    io.emit("arduino:data", {
-      value: data,
-    });
-  }
-});
-*/
 // Função para ler o conteúdo do arquivo
 
 const filePath = path.join(__dirname, "/shared", "dataCard.txt");
@@ -86,7 +70,6 @@ const readData = () => {
       console.error("Erro ao ler o ficheiro:", err);
       return;
     }
-    console.log(data.length);
     if (data.length > 4) {
       io.emit("arduino:data", {
         value: data,
@@ -124,7 +107,7 @@ const escrever = (data, callback) => {
 };
 
 app.post("/api/arduinoled", [authJwt.verifyToken], (req, res) => {
-  console.log("data: ",req.body.code);
+  
   escrever(req.body.code, (err) => {
     if (err) {
       console.error("Erro ao gravar os dados:", err);

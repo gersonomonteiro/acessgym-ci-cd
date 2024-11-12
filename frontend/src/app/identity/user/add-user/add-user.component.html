@@ -35,10 +35,10 @@
                     Firstname is required.
                   </div>
                   <div *ngIf="Form.controls['firstname'].errors.minlength">
-                    Firstname must be at least 3 characters
+                    Firstname must be at least 2 characters
                   </div>
                   <div *ngIf="Form.controls['firstname'].errors.maxlength">
-                    Firstname must not exceed 20 characters
+                    Firstname must not exceed 50 characters
                   </div>
                 </div>
                 <div class="form-group">
@@ -55,10 +55,10 @@
                     Lastname is required.
                   </div>
                   <div *ngIf="Form.controls['lastname'].errors.minlength">
-                    Username must be at least 3 characters
+                    Username must be at least 2 characters
                   </div>
                   <div *ngIf="Form.controls['lastname'].errors.maxlength">
-                    Username must not exceed 20 characters
+                    Username must not exceed 50 characters
                   </div>
                 </div>
                 <div class="form-group">

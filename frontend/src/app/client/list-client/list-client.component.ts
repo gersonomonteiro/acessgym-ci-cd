@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { NgxPermissionsService } from 'ngx-permissions'
 import { ConfirmationDialogService } from 'src/app/shered/confirmation-dialog/confirmation-dialog.service'
 import { Client } from 'src/app/_model/client'
 import { ClientService } from 'src/app/_services/client/client.service'
