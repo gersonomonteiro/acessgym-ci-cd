@@ -6,6 +6,7 @@ const fs = require("fs");
 const socketIO = require("socket.io");
 const ioClient = require("socket.io-client");
 const morgan = require('morgan');
+const axios = require("axios");
 
 app = express();
 
@@ -59,65 +60,21 @@ app.use("/api/uploads", express.static(path.join(__dirname, "..", "/uploads")));
 app.use("/api", accessRouter);
 app.use("/api", receiptRouter);
 
-// Função para ler o conteúdo do arquivo
-
-const filePath = path.join(__dirname, "/shared", "dataCard.txt");
-const ledFilePath = path.join(__dirname, "/shared", "ledData.txt");
-
-const readData = () => {
-  fs.readFile(filePath, "utf8", (err, data) => {
-    if (err) {
-      console.error("Erro ao ler o ficheiro:", err);
-      return;
-    }
-    if (data.length > 4) {
-      io.emit("arduino:data", {
-        value: data,
-      });
-    }
-    
-  });
-};
-
-const limpar = (data) => {
-  fs.writeFile(filePath, "", (err) => {
-    if (err) {
-      console.error("Erro ao limpar o ficheiro:", err);
-    }
-  });
-};
-
-fs.watchFile(filePath, (curr, prev) => {
-  if (curr.mtime > prev.mtime && curr.size > 1 && curr.size <= 8)  {
-    readData();
-    setTimeout(() => {
-      limpar();
-    }, 1000);
-  }
-});
-
-const escrever = (data, callback) => {
-  fs.appendFile(ledFilePath, data, (err) => {    
-    if (err) {
-      console.error("Erro ao escrever no ficheiro: ", err);
-      callback(err);
-    }
-    callback(null);
-  });
+const sendSerialData = async (data) => {  
+  const iot_url = constants.URL_IOT + "/api/write-serial"
+  try {
+    const response = await axios.post(iot_url, data);
+  } catch (err) {
+    console.error("Erro ao enviar dados para API:", err.message);
+  }  
 };
 
 app.post("/api/arduinoled", [authJwt.verifyToken], (req, res) => {
-  
-  escrever(req.body.code, (err) => {
-    if (err) {
-      console.error("Erro ao gravar os dados:", err);
-    } else {
-      return res.json()
-    }
-  })
+  let data = {led: req.body.code}
+  sendSerialData(data)  
 });
 
-app.post("/send-notification", (req, res) => {
+app.post("/api/serial-data", (req, res) => {
   const data = { data: req.body.data };  
   io.emit("arduino:data", {
     value: req.body.data,

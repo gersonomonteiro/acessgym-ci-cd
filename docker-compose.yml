@@ -51,8 +51,6 @@ services:
       timeout: 3s
       start_period: 20s
       retries: 2
-    devices:
-      - /dev/ttyS2:/dev/ttyACM0
     depends_on:
       - mysql
     volumes:

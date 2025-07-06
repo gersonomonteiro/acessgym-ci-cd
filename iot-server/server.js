@@ -1,81 +1,92 @@
 const SerialPort = require("serialport");
-const Readline = require("@serialport/parser-readline");
-const fs = require("fs");
+const Readline   = require("@serialport/parser-readline");
+const axios      = require("axios");
+const express    = require("express");
+const bodyParser = require("body-parser");
+const cors       = require("cors");
 
-const portName = "COM3"; // Altere para a porta serial correta
+const API_URL     = "http://localhost:8080/api/serial-data";
+const SERVER_PORT = 8888;
 
-const serial = new SerialPort(portName, { baudRate: 9600 });
-const parser = serial.pipe(new Readline());
+const app = express();
+app.use(cors({ origin: ["http://localhost:8080", "https://backend.acessgym.cv"] }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-const filePath = "../backend/src/shared/dataCard.txt";
-const ledFilePath = "../backend/src/shared/ledData.txt";
+let serial;                 
+let serialConnected = false;
+let currentPortName = null;
 
-// Função para escrever os dados no arquivo
-const writeFl = (data) => {
-  clearFile(ledFilePath);
-  fs.appendFile(filePath, data, (err) => {
-    if (err) {
-      console.error("Erro ao escrever no arquivo:", err);
-    }
+app.get("/", (req, res) => {
+  res.json({
+    iot: "UP",
+    serialConnected,
+    port: currentPortName,
   });
-};
+});
 
-const readFl = () => {
-  fs.readFile(ledFilePath, "utf8", (err, data) => {
+app.post("/api/write-serial", (req, res) => {
+  if (!serialConnected) {
+    return res.status(503).json({ error: "Serial port not connected" });
+  }
+  const led = req.body.led;
+  serial.write(led, (err) => {
     if (err) {
-      console.error("Erro ao ler o ficheiro:", err);
-      return;
+      console.error("Erro ao escrever na porta serial:", err);
+      return res.status(500).json({ error: "write error" });
     }
-    console.log(data);
+    res.json({ led });
   });
-};
+});
 
-const clearFile = (path) => {
-  fs.writeFile(path, "", (err) => {
-    if (err) {
-      console.error("Erro ao limpar o ficheiro:", err);
-    }
-  });
-};
+app.listen(SERVER_PORT, () =>
+  console.log(`App listening on http://localhost:${SERVER_PORT}`)
+);
 
-fs.watchFile(ledFilePath, (curr, prev) => {
-  if (curr.mtime > prev.mtime && curr.size > 0) {
-    fs.readFile(ledFilePath, "utf8", (err, data) => {
-      if (err) {
-        console.error("Erro ao ler o ficheiro:", err);
-        return;
+async function findArduinoPort() {
+  const ports = await SerialPort.list();
+  const arduino = ports.find(
+    (p) => p.manufacturer && p.manufacturer.toLowerCase().includes("arduino")
+  );
+  if (!arduino) throw new Error("Nenhuma porta Arduino encontrada");
+  return arduino.path;
+}
+
+(async () => {
+  try {
+    currentPortName = await findArduinoPort();
+
+    serial = new SerialPort(currentPortName, { baudRate: 9600 });
+    serialConnected = true;
+    console.log(`Conexão com a porta ${currentPortName} aberta.`);
+
+    const parser = serial.pipe(new Readline());
+
+    const sendSerialData = async (data) => {
+      try {
+        await axios.post(API_URL, { data });
+      } catch (err) {
+        console.error("Erro ao enviar dados para API:", err.message);
       }
-      console.log(data);
-      serial.write(data, (err) => {
-        if (err) {
-          console.error("Erro ao escrever na porta serial:", err);
-        }
-      });
+    };
+
+    parser.on("data", (data) => {
+      if (data !== "0" && data !== "1" && data.trim()) {
+        sendSerialData(data.trim());
+      }
     });
-    
-    /*setTimeout(() => {
-      clearFile(ledFilePath);
-    }, 1000);*/
+
+    serial.on("error", (err) => {
+      console.error("Erro na porta serial:", err);
+    });
+
+    serial.on("close", () => {
+      console.log(`Conexão com a porta ${currentPortName} fechada.`);
+      serialConnected = false;
+      currentPortName = null;
+      serial = undefined;
+    });
+  } catch (err) {
+    console.error(err.message);
   }
-});
-
-// Evento disparado quando há leitura de dados da porta serial
-parser.on("data", (data) => {
-  if (data !== "0" && data !== "1" && data.trim() !== '' && data.length > 0 ) {
-    clearFile(filePath);
-    writeFl(data.trim());
-  }
-});
-
-serial.on("open", () => {
-  console.log(`Conexão com a porta ${portName} aberta.`);
-  clearFile(filePath)
-});
-
-serial.on("err", (err) => {
-  console.error("Erro na porta serial:", err);
-});
-
-serial.on("close", () => {
-  console.log(`Conexão com a porta ${portName} fechada.`);
-});
+})();
