@@ -28,6 +28,6 @@ router.put(
     clientController.update
 )
 router.delete('/client/:id', [authJwt.verifyToken], clientController.remove)
-router.get('/clients/ative', clientController.inspiredMonthlyFee)
-router.get('/clients/sendnotificationbyemail', clientController.sendClientNotificationByEmail)
+router.get('/clients/ative', [authJwt.verificarAutorizacao], clientController.inspiredMonthlyFee)
+router.get('/clients/sendnotificationbyemail', [authJwt.verificarAutorizacao], clientController.sendClientNotificationByEmail)
 module.exports = router

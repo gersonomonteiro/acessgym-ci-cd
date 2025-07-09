@@ -24,13 +24,19 @@ exports.verifyToken = (req, res, next) => {
 };
 
 exports.verificarAutorizacao = (req, res, next) => {
-  let token = req.headers["authorization"];
-  let tokenEsperado = `Bearer ${config.TOKEN_INTERNAL}`
-  if (token === tokenEsperado) {
-    return next();    
-  }else{
-    return res.status(401).json({ error: 'Unauthorized!' });
+  const tokenHeader = req.headers['authorization'];
+
+  if (!tokenHeader || !tokenHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Token de autenticação ausente ou malformado.' });
   }
-  
+
+  const tokenRecebido = tokenHeader.trim();
+  const tokenEsperado = `Bearer ${config.TOKEN_INTERNAL}`;
+
+  if (tokenRecebido === tokenEsperado) {
+    return next();
+  }
+
+  return res.status(401).json({ error: 'Acesso não autorizado.' });
 };
 

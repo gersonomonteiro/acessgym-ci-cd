@@ -13,27 +13,32 @@ const Configuration = require('../models/Configuration')
 const path = require("path");
 const fs = require("fs");
 
+const defaultHeaders = {
+  'Authorization': `Bearer ${authConfig.TOKEN_INTERNAL}`,
+};
+
 module.exports = {
+    scheduledFetch(cronExpr, endpoint) {
+      schedule.scheduleJob(cronExpr, async () => {
+        const url = `${constants.URL_BASE}${endpoint}`;
+        try {
+          const res  = await fetch(url, { method: 'GET', headers: defaultHeaders });
+          const data = await res.json();
+          console.log(`[${endpoint}] resposta:`, data);
+        } catch (err) {
+          console.error(`[${endpoint}] erro:`, err);
+        }
+      });
+    },
+  
   disableInspiredClient() {
-    schedule.scheduleJob("58 23 * * *", function () {
-      const url = `${constants.URL_BASE}/api/clients/ative`;
-      fetch(url, {
-        method: "get",
-      })
-        .then((res) => res.json())
-        .then((json) => console.log(json));
-    });
+    this.scheduledFetch('58 23 * * *', '/api/clients/ative');
   },
+
   sendClientNotificationByEmail() {
-    schedule.scheduleJob("0 0 * * *", function () {
-      const url = `${constants.URL_BASE}/api/clients/sendnotificationbyemail`;
-      fetch(url, {
-        method: "get",
-      })
-        .then((res) => res.json())
-        .then((json) => console.log(json));
-    });
+    this.scheduledFetch('0 0 * * *', '/api/clients/sendnotificationbyemail');
   },
+
   dateCompare(d1, d2) {
     const date1 = d1;
     const date2 = d2;
@@ -58,27 +63,23 @@ module.exports = {
     // Verifica se a data atual é posterior à data de expiração
     return currentDate > expirationDate;
   },
+  expirationCutOff(){
+    const today = new Date();
+    today.setMonth(today.getMonth() - 1);       // 1 mês atrás
+    return today;
+  },
+  
   diffDays(dayTocheck, data) {
-    const currentDate = new Date();
-    const dbDate = new Date(data);
-    const currentMidnight = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      currentDate.getDate()
-    );
-    const dbMidnight = new Date(
-      dbDate.getFullYear(),
-      dbDate.getMonth(),
-      dbDate.getDate()
-    );
-    const diffInMs = currentMidnight.getTime() - dbMidnight.getTime();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normaliza para meia-noite
+    
+    const compareDate = new Date(data);
+    compareDate.setHours(0, 0, 0, 0); // Normaliza para meia-noite
+    
+    const diffInMs = today - compareDate;
     const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-
-    if (diffInDays === dayTocheck) {
-      return true;
-    } else {
-      return false;
-    }
+    
+    return diffInDays === dayTocheck;
   },
   yearAndmonth(y) {
     const date = new Date();
@@ -90,7 +91,6 @@ module.exports = {
 
   sendEmail(message) {
     const mailjet = Mailjet.apiConnect(config.client_key, config.client_secret);
-
     const request = mailjet
       .post("send", {
         version: "v3.1",
