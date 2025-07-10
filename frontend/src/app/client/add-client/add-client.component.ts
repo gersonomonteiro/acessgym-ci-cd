@@ -27,8 +27,8 @@ export class AddClientComponent implements OnInit {
   //isAtive: boolean = false;
   fileSizeError: string = "";
   meses = [
-    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+    'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
   ];
 
   constructor(
@@ -152,6 +152,7 @@ export class AddClientComponent implements OnInit {
                 }
             ]
         }
+        console.log(recibo)
         this.mensalidadeService.store(recibo).subscribe(
           (mensalidade) => {
               console.log(mensalidade)                

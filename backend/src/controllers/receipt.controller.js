@@ -59,7 +59,7 @@ module.exports = {
                         janeiro: 0, fevereiro: 1, marco: 2, abril: 3, maio: 4, junho: 5,
                         julho: 6, agosto: 7, setembro: 8, outubro: 9, novembro: 10, dezembro: 11
                     };
-                    let lastMonthPaid = monthNames[req.body.monthlyPayment[0].month];
+                    let lastMonthPaid = monthNames[req.body.monthlyPayment[0].month.toLowerCase()];
                     let monthName
                     const listPrice = []
                     for (let i = 0; i < req.body.monthlyPayment.length; i++) {
@@ -72,7 +72,7 @@ module.exports = {
                         }
                         const priceAfterDiscount = item.price * (1 - item.discount / 100);
                         listPrice.push(priceAfterDiscount)
-                        const currentMonth = monthNames[item.month];
+                        const currentMonth = monthNames[item.month.toLowerCase()];
                         // Verifica se o mês atual está em sequência
                         if (i > 0 && (currentMonth - lastMonthPaid !== 1)) {
                             return res.status(400).json({
