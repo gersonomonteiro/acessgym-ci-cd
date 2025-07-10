@@ -16,6 +16,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: jmYFW28LuQmVXCo9tLB1
       MYSQL_DATABASE: acessgym
+      TZ: Atlantic/Cape_Verde
     volumes:
       - ./mysql/scripts:/docker-entrypoint-initdb.d
       #- ./mysql/conf/my.cnf:/etc/mysql/my.cnf
@@ -24,6 +25,8 @@ services:
     build: ./frontend
     container_name: frontend-accessgym
     restart: unless-stopped
+    environment:
+      - TZ=Atlantic/Cape_Verde
     ports:
       - 4200:4200
     healthcheck:
@@ -43,6 +46,8 @@ services:
     command: sh -c "npm run migrate && node src/index.js"
     container_name: backend-accessgym
     restart: unless-stopped
+    environment:
+      - TZ=Atlantic/Cape_Verde    
     ports:
       - 8080:8080
     healthcheck:

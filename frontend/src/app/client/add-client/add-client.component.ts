@@ -7,6 +7,7 @@ import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ClientService } from "src/app/_services/client/client.service";
 import { NotificacaoService } from "src/app/_services/notificacao/notificacao.service";
 import { WebcamImage } from "ngx-webcam";
+import { MensalidadeService } from "src/app/_services/mensalidade/mensalidade.service";
 
 @Component({
   selector: "app-add-client",
@@ -25,12 +26,17 @@ export class AddClientComponent implements OnInit {
   options: any = { format: "YYYY/MM/DD" };
   //isAtive: boolean = false;
   fileSizeError: string = "";
+  meses = [
+    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+  ];
 
   constructor(
     private formBuilder: FormBuilder,
     private activeModal: NgbActiveModal,
     private clientService: ClientService,
-    private notificacaoService: NotificacaoService
+    private notificacaoService: NotificacaoService,
+    private mensalidadeService: MensalidadeService
   ) {
     this.Form = this.formBuilder.group({
       fullName: ["", Validators.required],
@@ -129,12 +135,31 @@ export class AddClientComponent implements OnInit {
     formData.append("cardCode", this.Form.get("cardCode").value);
     formData.append("image", this.Form.get("img").value);
 
+    
     this.clientService.store(formData).subscribe(
       (client) => {
         console.log(client);
         this.ToasterSuccess(client.message);
         this.Form.reset();
         //window.location.reload()
+        let recibo = {
+            "client_id": client.id,
+            "monthlyPayment": [        
+                {
+                    "price": 1000,
+                    "month": this.meses[new Date().getMonth()],
+                    "discount": 0
+                }
+            ]
+        }
+        this.mensalidadeService.store(recibo).subscribe(
+          (mensalidade) => {
+              console.log(mensalidade)                
+          },
+          (err) => {
+              console.log(err)
+          }
+        )
         this.decline();
       },
       (err) => {

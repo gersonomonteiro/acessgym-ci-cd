@@ -174,6 +174,7 @@ module.exports = {
               .then((client) => {
                 res.status(200).send({
                   message: "Cliente registado com sucesso!",
+                  id: client.id
                 });
               })
               .catch((err) => {
